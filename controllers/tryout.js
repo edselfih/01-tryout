@@ -1,3 +1,6 @@
+const Tryout = require('../models/tryout.js')
+
 module.exports.index = async (req, res) => {
-    res.render('./tryout/index')
+    const tryouts = await Tryout.find({})
+    res.render('./tryout/index', {tryouts})
 };

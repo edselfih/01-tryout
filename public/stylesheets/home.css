@@ -1,0 +1,11 @@
+#body {
+    background-color: rgb(151, 217, 255);
+}
+
+nav.bg-dark {
+    background-color: rgba(0, 0, 255, 0)!important;
+}
+
+nav#navbar .bc {
+    color: #000000;
+}

@@ -1,7 +1,13 @@
 <% layout('layout/template.ejs') %>
-    <h1>Tryouts List</h1>
-    <ul>
-        <% for( tryout of tryouts) { %> 
-            <li><%= tryout.title %> </li>
-    <% } %>
-    </ul>
+<div class="card-group mb-5">
+    <% for( tryout of tryouts) {%> 
+        <div class="card">
+            <img src="<%= tryout.image %>" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title"><%= tryout.title %></h5>
+                <p class="card-text"><%= tryout.description%></p>
+                <a href="" class="btn btn-success">Mulai</a>
+            </div>
+        </div>
+    <% }%>
+</div>

@@ -17,7 +17,9 @@ const mongoStore = require('connect-mongo');
 
 // Local Modules
 const tryoutRoutes = require('./routes/tryout');
+const userRoutes = require('./routes/user');
 
+const User = require('./models/user');
 const AppError = require('./utilities/AppError.js');
 
 // Database
@@ -94,13 +96,13 @@ const sesConfig = {
 };
 app.use(session(sesConfig));
 
-// // Auth
-// app.use(passport.initialize());
-// app.use(passport.session());
+// Auth
+app.use(passport.initialize());
+app.use(passport.session());
 
-// passport.use(new localStrategy( User.authenticate()));
-// passport.serializeUser(User.serializeUser());
-// passport.deserializeUser(User.deserializeUser());
+passport.use(new localStrategy( User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // Flash
 app.use(flash());
@@ -115,6 +117,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/tryout', tryoutRoutes);
+app.use('/', userRoutes);
 app.get('/', (req, res) => {
     res.render('index')
 });

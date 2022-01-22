@@ -1,0 +1,23 @@
+<% layout('layout/template.ejs') %>
+<div class="row">
+    <h1 class="text-center">Updating Tryout</h1>
+    <div class="col-sm-6 offset-sm-3">
+        <form action="/tryout/<%= tryouts._id %>?_method=PUT" method="POST" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" id="title" name="tryout[title]" value="<%= tryouts.title%>" autofocus required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <input type="text" class="form-control" id="description" name="tryout[description]" value="<%=  tryouts.description %>"  autofocus required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+    </div>
+</div>

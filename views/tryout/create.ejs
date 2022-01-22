@@ -1,0 +1,25 @@
+<% layout('layout/template.ejs') %>
+<div class="row">
+    <h1 class="text-center">Make New Tryout</h1>
+    <div class="col-sm-6 offset-sm-3">
+        <form action="/tryout" method="POST" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" id="title" name="tryout[title]" placeholder="Input nama tryout" autofocus required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <input type="text" class="form-control" id="description" name="tryout[description]" placeholder="Input deskripsi tryout" autofocus required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+    </div>
+</div>
+
+<!-- nanti kalau dibutuhkan upload image ya install multer trus tambahin enctype="multipart/form-data" di form -->

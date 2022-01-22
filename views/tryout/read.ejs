@@ -1,0 +1,8 @@
+<% layout('layout/template.ejs') %>
+
+<h1><%= tryouts.title %> Tryout</h1>
+<p><%= tryouts.description %> </p>
+<a href="/tryout/<%= tryouts._id %>/update" class="btn btn-success mb-3">Edit</a>
+<form action="/tryout/<%= tryouts._id %>?_method=DELETE" method="POST">
+    <button class="btn btn-danger" >Delete</button>
+</form>

@@ -7,4 +7,7 @@ const tryoutController = require('../controllers/tryout');
 router.route('/')
     .get( tryoutController.index );
 
+router.route('/:tryoutId')
+    .get( tryoutController.showTryout );
+
 module.exports = router;

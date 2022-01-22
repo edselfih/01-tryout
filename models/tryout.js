@@ -16,7 +16,7 @@ const tryoutSchema = new Schema ({
     }
 })
 
-module.exports = mongoose.model('tryouts', tryoutSchema)
+module.exports = mongoose.model('Tryout', tryoutSchema)
 
 
 

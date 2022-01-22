@@ -12,7 +12,7 @@ module.exports.createUser = async (req, res) => {
         console.log(newUser)
         req.login(user, function(err) {
             if (err) { return next(err); }
-            // req.flash('success', 'sukses membuat user')
+            req.flash('success', 'sukses membuat user')
             res.redirect(`/`)
         });
     } catch (e) {
@@ -27,7 +27,7 @@ module.exports.loginPage = async (req, res) => {
 }
 
 module.exports.login = (async (req, res) => {
-    // req.flash('success', 'selamat datang');
+    req.flash('success', 'selamat datang');
     const toRedirect = req.session.toRedirect || '/';
     req.session.toRedirect = null;
     res.redirect(toRedirect);
@@ -36,6 +36,6 @@ module.exports.login = (async (req, res) => {
 
 module.exports.logout = async (req, res) => {
     req.logout();
-    // req.flash('success', 'bye');
+    req.flash('success', 'bye');
     res.redirect('/')
 }

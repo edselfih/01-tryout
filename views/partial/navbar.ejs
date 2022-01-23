@@ -1,7 +1,7 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-dark" id="navbar">
+<nav class="navbar fixed-top navbar-expand-lg navbar-light" id="navbar">
   <div class="container-fluid">
     <a class="navbar-brand" href="/">Home</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" onclick="changeBg()">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
@@ -21,3 +21,40 @@
     </div>
   </div>
 </nav>
+
+<!-- <script type="text/javascript">
+  setInterval(function() {
+    const navHeight = document.getElementById("navbar").offsetHeight
+    function changeBg () {
+      if (window.scrollY > navHeight) {
+        document.getElementById("navbar").classList.add("scrolled");
+      }
+    };
+  })
+</script> -->
+
+<script type="text/javascript">
+  let i = 0
+  const changeBg = function () {
+    if( i % 2 === 1){
+      document.getElementById("navbar").style.backgroundColor = null;
+      i++
+    } else {
+      document.getElementById("navbar").style.backgroundColor = '#0A81AB';
+      i++
+    }
+  };
+</script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+crossorigin="anonymous"></script>
+
+<script>
+$(function () {
+    $(document).scroll(function () {
+        var $nav = $("#navbar");
+        $nav.toggleClass("scrolled", $(this).scrollTop() > $nav.height());
+    });
+});
+
+</script>

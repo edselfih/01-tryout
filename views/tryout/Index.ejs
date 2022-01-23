@@ -10,7 +10,11 @@
                 <div class="card-body">
                   <h5 class="card-title"><%= tryout.title %></h5>
                   <p class="card-text"><%= tryout.description %></p>
-                  <a href="/tryout/<%= tryout._id %>" class="btn btn-primary">Lihat</a>
+                  <% if(user) { %> 
+                    <a href="/tryout/<%= tryout._id %>" class="btn btn-primary">Lihat</a>
+                  <% } else { %> 
+                  <a href="/login" class="btn btn-primary">Login Untuk Masuk</a>
+                  <% } %> 
                 </div>
               </div>
             </div>

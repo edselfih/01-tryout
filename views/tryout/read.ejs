@@ -1,6 +1,5 @@
 <% layout('layout/template.ejs') %>
 <script type="text/javascript">
-    const disable = false
     function disableButton(btn) {
         document.getElementById(btn.id).href = "#";
     }
@@ -9,18 +8,24 @@
 <h1><%= tryouts.title %> Tryout</h1>
 <p><%= tryouts.description %> </p>
 
-
 <a href="/tryout/<%= tryouts._id %>/update" class="d-inline btn btn-success">Edit</a>
 
 <form action="/tryout/<%= tryouts._id %>?_method=DELETE" method="POST" class="d-inline mb-3">
     <button class="btn btn-danger" >Delete</button>
 </form>
 
+<% if(!user.admin) { %> 
 <p class="d-inline mb-3">
     <a class="btn btn-primary" data-bs-toggle="collapse" href="#Soal" role="button" id="start" aria-expanded="false" aria-controls="collapseExample" onclick="disableButton(this)" >
       Mulai
     </a>
 </p>
+<% } %>
+<p class="d-inline mb-3">
+    <a class="btn btn-primary" data-bs-toggle="collapse" href="#Soal" role="button" id="start" aria-expanded="false" aria-controls="collapseExample">
+      Problem Set
+    </a>
+</p> 
 
 <div class="collapse mt-3" id="Soal">
     <div class="card card-body">

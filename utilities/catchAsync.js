@@ -5,4 +5,4 @@ module.exports = func => {
 }
 
 //fungsi ini biar kita gak input lagi try n catch di route asli
-// try catch berfungsi menghandle error dari routes dan monggi, karena kalau if dan return biasa gk bisa handle mongo
+// try catch berfungsi menghandle error dari routes dan monggo, karena kalau if dan return biasa gk bisa handle mongo

@@ -3,20 +3,21 @@ const router = express.Router();
 
 const catchAsync = require('../utilities/catchAsync.js');
 const tryoutController = require('../controllers/tryout');
+const {isLogin} = require('../utilities/mildeware')
 
 router.route('/')
     .get( tryoutController.index )
-    .post( tryoutController.createTryout );
+    .post( isLogin, tryoutController.createTryout );
 
 router.route('/create')
-    .get( tryoutController.createTryoutPage ); 
+    .get( isLogin, tryoutController.createTryoutPage ); 
 
 router.route('/:tryoutId')
-    .get( tryoutController.readTryout )
-    .put( tryoutController.updateTryout )
-    .delete( tryoutController.deleteTryout )
+    .get( isLogin, tryoutController.readTryout )
+    .put( isLogin, tryoutController.updateTryout )
+    .delete( isLogin, tryoutController.deleteTryout )
 
 router.route('/:tryoutId/update')
-    .get( tryoutController.updateTryoutPage );
+    .get( isLogin, tryoutController.updateTryoutPage );
 
 module.exports = router;

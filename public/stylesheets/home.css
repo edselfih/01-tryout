@@ -1,4 +1,4 @@
-#body {
+/* #body {
     background-color: #F9DFDC;
 }
 
@@ -8,4 +8,18 @@ nav.bg-dark {
 
 nav#navbar .bc {
     color: #000000;
+}
+
+.navbar.scrolled {
+    background: #0A81AB);
+    transition: background 500ms;
+} */
+
+.navbar.fixed-top.scrolled {
+    background-color: #0A81AB;
+    transition: background-color 100ms linear;
+}
+
+.navbar.fixed-top {
+    transition: background-color 100ms linear;
 }

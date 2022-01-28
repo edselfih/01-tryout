@@ -8,7 +8,12 @@ const userSchema = new Schema ({
         required: true,
         unique: true
     },
-    admin: Boolean
+    admin: Boolean,
+    verified: {
+        type: Boolean,
+        default: false,
+        required: true
+    }
 })
 
 userSchema.plugin(passportLocalMongoose)

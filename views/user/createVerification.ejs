@@ -1,0 +1,30 @@
+<% layout('layout/template.ejs') %>
+    <div class="container-fluid d-flex justify-content-center">
+        <div class="mb-3">
+            <div class="card shadow" style="width: 25rem;">
+                <img src="https://image.freepik.com/free-vector/students-wearing-different-face-masks_23-2148603165.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h3 class="card-title">Verification</h3>
+                    <form  action="/verification" method="POST" class="needs-validation" novalidate>
+                        <div class="mb-3" >
+                            <label class="form-label" for="username">Username</label>
+                            <input class="form-control" type="text" name="username" id="username" placeholder="insert username" required autofocus> 
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                        <div class="mb-3" >
+                            <label class="form-label" for="token">Token</label>
+                            <input class="form-control" type="token" name="token" id="token" placeholder="insert token" required>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 mb-3">
+                            <button class="btn btn-success">Submit</button>
+                        </div>
+                    </form>
+                </div>
+              </div>
+        </div>
+    </div>

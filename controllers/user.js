@@ -1,25 +1,45 @@
 const User = require('../models/user.js');
+const UserVerification = require('../models/userVerification.js');
+const { generateToken, transporter } = require('../utilities/mail.js');
+const {mailVerification} = require('../utilities/mailVerification.js')
 
 module.exports.createUserPage = async (req, res) => {
-    res.render('./user/create')
+    res.render('./user/create');
 }
 
 module.exports.createUser = async (req, res) => {
     try {
         const {username, email, password} = req.body
         const user = await new User({username, email , admin : false})
-        const newUser = await User.register(user, password)
-        console.log(newUser)
-        req.login(user, function(err) {
-            if (err) { return next(err); }
-            req.flash('success', 'sukses membuat user')
-            res.redirect(`/`)
-        });
-    } catch (e) {
-        req.flash('error', e.message)
-        res.redirect(`/user`)
-    }
 
+        const token = generateToken()
+        const userVerification = new UserVerification({
+            owner: user._id,
+            token
+        })
+
+        await userVerification.save();
+        const newUser = await User.register(user, password);
+        const newToken = await transporter.sendMail({
+            from: 'edselfih@gmail.com',
+            to: newUser.email,
+            subject: 'Verify your email account',
+            html: mailVerification(token)
+        })
+        // console.log(newUser, newToken);
+        req.flash('success', 'verifikasi akun melalui email anda')
+        res.redirect('/verification')
+        
+
+        // req.login(user, function(err) {
+        //     if (err) { return next(err); }
+        //     req.flash('success', 'sukses membuat user')
+        //     res.redirect(`/`)
+        // });
+    } catch (e) {
+        req.flash('error', e.message, e.stack);
+        res.redirect(`/user`);
+    };
 }
 
 module.exports.loginPage = async (req, res) => {
@@ -39,3 +59,32 @@ module.exports.logout = async (req, res) => {
     req.flash('success', 'bye');
     res.redirect('/')
 }
+
+module.exports.userVerificationPage = async (req, res) => {
+    res.render('./user/createVerification');
+}
+
+module.exports.userVerification = async (req, res) => {
+    try{
+        const {username, token} = req.body;
+        const user = await User.findOne({username});
+        const storedToken = await UserVerification.findOne({owner:user._id});
+        const isMatched = await storedToken.compareToken(token)
+        if (!isMatched) {
+            req.flash('error', 'Token atau username salah');
+            res.redirect(`/verification`);
+        }
+        user.verified = true;
+        await UserVerification.findByIdAndDelete(storedToken._id)
+        await user.save( )
+        req.login(user, function(err) {
+            if (err) { return next(err); }           
+            req.flash('success', 'sukses membuat user')
+            console.log('sukses login')
+            res.redirect(`/`)   
+        });
+    } catch (e) {
+        req.flash('error', e.message, e.stack);
+        res.redirect(`/user`);
+    };
+};

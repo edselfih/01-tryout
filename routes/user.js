@@ -4,6 +4,10 @@ const catchAsync = require('../utilities/catchAsync.js');
 const userController = require('../controllers/user')
 const passport = require('passport');
 
+router.route('/verification')
+    .get(userController.userVerificationPage)
+    .post(userController.userVerification)
+
 router.route('/user')
     .get(catchAsync(userController.createUserPage))
     .post(userController.createUser)

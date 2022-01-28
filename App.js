@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 // Core Modules
 const path = require('path');
 
@@ -11,7 +13,8 @@ const passport = require('passport');
 const localStrategy = require('passport-local');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require("helmet");
-const dbUrl = 'mongodb://localhost:27017/tryout';
+// const dbUrl = process.env.MONGO_URL || 'mongodb://localhost:27017/tryout';
+const dbUrl = process.env.MONGO_URL
 const mongoose = require('mongoose');
 const mongoStore = require('connect-mongo');
 
@@ -79,11 +82,11 @@ const fontSrcUrls = [
 // Sessions
 const secret = process.env.SECRET || 'inirahasibangetlahpokoknya150122';
 const sesConfig = {
-    // store: mongoStore.create({
-    //     secret,
-    //     mongoUrl: dbUrl,
-    //     touchAfter: 24 * 3600 // time period in seconds
-    //   }),
+    store: mongoStore.create({
+        secret,
+        mongoUrl: dbUrl,
+        touchAfter: 24 * 3600 // time period in seconds
+      }),
     name: 'session',
     secret,
     resave: false,

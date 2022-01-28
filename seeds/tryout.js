@@ -1,9 +1,11 @@
+require('dotenv').config();
 const mongoose = require('mongoose')
 const Tryout = require('../models/tryout.js')
+const dbUrl = process.env.MONGO_URL
 
 main().catch(err => console.log(err));
 async function main() {
-    await mongoose.connect('mongodb://localhost:27017/tryout');
+    await mongoose.connect(dbUrl);
     console.log('sukses')
 }
 const seeding = async () => {

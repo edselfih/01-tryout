@@ -61,15 +61,23 @@ module.exports.logout = async (req, res) => {
 }
 
 module.exports.userVerificationPage = async (req, res) => {
-    res.render('./user/createVerification');
+    res.render('./user/verification');
 }
 
 module.exports.userVerification = async (req, res) => {
     try{
         const {username, token} = req.body;
         const user = await User.findOne({username});
+        if(!user) {
+            req.flash('error', 'Token atau username salah');
+            res.redirect(`/verification`);
+        }
         const storedToken = await UserVerification.findOne({owner:user._id});
-        const isMatched = await storedToken.compareToken(token)
+        if(!storedToken) {
+            req.flash('error', 'Token expired');
+            res.redirect(`/verification`);
+        }
+        const isMatched = await storedToken.compareToken(token.trim())
         if (!isMatched) {
             req.flash('error', 'Token atau username salah');
             res.redirect(`/verification`);
@@ -80,7 +88,6 @@ module.exports.userVerification = async (req, res) => {
         req.login(user, function(err) {
             if (err) { return next(err); }           
             req.flash('success', 'sukses membuat user')
-            console.log('sukses login')
             res.redirect(`/`)   
         });
     } catch (e) {
@@ -88,3 +95,21 @@ module.exports.userVerification = async (req, res) => {
         res.redirect(`/user`);
     };
 };
+
+module.exports.resendToken = async (req, res) => {
+    const user = req.user
+    // console.log(req.user) // req user itu ada di session
+    const token = generateToken()
+    const userVerification = new UserVerification({
+        owner: user._id,
+        token
+    })
+    await userVerification.save();
+    const newToken = await transporter.sendMail({
+        from: 'edselfih@gmail.com',
+        to: user.email,
+        subject: 'Verify your email account',
+        html: mailVerification(token)
+    })
+    res.redirect('/verification')
+}

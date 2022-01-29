@@ -7,7 +7,7 @@ module.exports.isLogin = async (req, res, next) => {
     if(!req.user.verified){
         req.session.toRedirect = req.originalUrl
         req.flash('error', 'verifiksi akun anda');
-        return res.redirect('/verification')
+        return res.redirect('/user/verification')
     }
     next()
 }

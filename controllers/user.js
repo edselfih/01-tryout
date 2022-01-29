@@ -1,7 +1,9 @@
+const { findOne } = require('../models/user.js');
 const User = require('../models/user.js');
 const UserVerification = require('../models/userVerification.js');
-const { generateToken, transporter } = require('../utilities/mail.js');
-const {mailVerification} = require('../utilities/mailVerification.js')
+const {generateToken, transporter } = require('../utilities/mail.js');
+const {mailVerification} = require('../utilities/mailVerification.js');
+
 
 module.exports.createUserPage = async (req, res) => {
     res.render('./user/create');
@@ -11,26 +13,22 @@ module.exports.createUser = async (req, res) => {
     try {
         const {username, email, password} = req.body
         const user = await new User({username, email , admin : false})
-
         const token = generateToken()
         const userVerification = new UserVerification({
             owner: user._id,
             token
         })
-
         await userVerification.save();
-        const newUser = await User.register(user, password);
         const newToken = await transporter.sendMail({
             from: 'edselfih@gmail.com',
             to: newUser.email,
-            subject: 'Verify your email account',
+            subject,
             html: mailVerification(token)
         })
+        const newUser = await User.register(user, password);
         // console.log(newUser, newToken);
         req.flash('success', 'verifikasi akun melalui email anda')
-        res.redirect('/verification')
-        
-
+        res.redirect('/user/verification')
         // req.login(user, function(err) {
         //     if (err) { return next(err); }
         //     req.flash('success', 'sukses membuat user')
@@ -70,17 +68,17 @@ module.exports.userVerification = async (req, res) => {
         const user = await User.findOne({username});
         if(!user) {
             req.flash('error', 'Token atau username salah');
-            res.redirect(`/verification`);
+            res.redirect(`/user/verification`);
         }
         const storedToken = await UserVerification.findOne({owner:user._id});
         if(!storedToken) {
             req.flash('error', 'Token expired');
-            res.redirect(`/verification`);
+            res.redirect(`/user/verification`);
         }
         const isMatched = await storedToken.compareToken(token.trim())
         if (!isMatched) {
             req.flash('error', 'Token atau username salah');
-            res.redirect(`/verification`);
+            res.redirect(`/user/verification`);
         }
         user.verified = true;
         await UserVerification.findByIdAndDelete(storedToken._id)
@@ -108,8 +106,73 @@ module.exports.resendToken = async (req, res) => {
     const newToken = await transporter.sendMail({
         from: 'edselfih@gmail.com',
         to: user.email,
-        subject: 'Verify your email account',
+        subject: 'verify your account',
         html: mailVerification(token)
     })
-    res.redirect('/verification')
+    res.redirect('/user/verification')
+}
+
+module.exports.updateUserPasswordPage = async (req, res) => {
+    res.render('./user/forgot');
+}
+
+module.exports.updateUserPasswordToken = async (req, res) => {
+    const {email} = req.body
+    const token = generateToken()
+    const userVerification = new UserVerification({
+        owner: await User.findOne({email}),
+        token
+    })
+    if(!userVerification) {
+        req.flash('error', 'akun tidak ditemukan');
+        res.redirect(`/user/forgot`);
+    }
+    await userVerification.save();
+    const newToken = await transporter.sendMail({
+        from: 'edselfih@gmail.com',
+        to: email,
+        subject: 'Forgot Password',
+        html: mailVerification(token)
+    })
+    req.session.userEmail = email;
+    res.redirect('/user/forgot');
+}
+
+module.exports.updateUserPassword = async (req, res) => {
+    try{
+        const {token} = req.body;
+        const email = req.session.userEmail
+        const user = await User.findOne({email});
+        const storedToken = await UserVerification.findOne({owner:user._id});
+        if(!storedToken) {
+            req.flash('error', 'Token expired');
+            res.redirect(`/user/forgot`);
+        }
+        const isMatched = await storedToken.compareToken(token.trim())
+        if (!isMatched) {
+            req.flash('error', 'Token salah');
+            res.redirect(`/user/forgot`);
+        }
+        await UserVerification.findByIdAndDelete(storedToken._id)
+        res.redirect(`/user/${user._id}/update`)
+    } catch (e) {
+        req.flash('error', e.message, e.stack);
+        res.redirect(`/user/forgot`);
+    };
+}
+
+module.exports.updateUserPage = async (req, res) => {
+    req.session.userEmail = null
+    const {userId} = req.params
+    const user = await User.findById(userId)
+    console.log(user._id)
+    res.render('./user/update', {user});
+}
+
+module.exports.updateUser = async (req, res) => {
+    const {password, username} = req.body
+    const user = await User.findOne({username});
+    await user.setPassword(password);
+    await user.save()
+    res.redirect('/')
 }

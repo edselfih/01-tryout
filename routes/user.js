@@ -4,12 +4,25 @@ const catchAsync = require('../utilities/catchAsync.js');
 const userController = require('../controllers/user')
 const passport = require('passport');
 
-router.route('/token')
+router.route('/user/forgot')
+    .get(userController.updateUserPasswordPage)
+    .post(userController.updateUserPassword)
+
+router.route('/user/forgot/t')
+    .post(userController.updateUserPasswordToken)
+
+router.route('/user/token')
     .post(userController.resendToken)
 
-router.route('/verification')
+router.route('/user/verification')
     .get(userController.userVerificationPage)
     .post(userController.userVerification)
+
+router.route('/user/:userId/update')
+    .get(userController.updateUserPage)
+
+router.route('/user/:userId')
+    .patch(userController.updateUser)
 
 router.route('/user')
     .get(catchAsync(userController.createUserPage))

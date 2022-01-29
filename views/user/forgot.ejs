@@ -4,15 +4,20 @@
             <div class="card shadow" style="width: 25rem;">
                 <img src="https://image.freepik.com/free-vector/students-wearing-different-face-masks_23-2148603165.jpg" class="card-img-top" alt="...">
                 <div class="card-body">
-                    <h3 class="card-title">Verification</h3>
-                    <form  action="/user/verification" method="POST" class="needs-validation" novalidate>
+                    <h3 class="card-title">Forgot Password</h3>
+                    <form  action="/user/forgot/t" method="POST" class="needs-validation" novalidate>
                         <div class="mb-3" >
-                            <label class="form-label" for="username">Username</label>
-                            <input class="form-control" type="text" name="username" id="username" placeholder="insert username" required autofocus> 
+                            <label class="form-label" for="email">Email</label>
+                            <input class="form-control" type="email" name="email" id="email" placeholder="insert email" required>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
                         </div>
+                        <div class="d-grid gap-2 mb-3">
+                            <button class="btn btn-success">Send Token</button>
+                        </div>
+                    </form>
+                    <form  action="/user/forgot" method="POST" class="needs-validation" novalidate>
                         <div class="mb-3" >
                             <label class="form-label" for="token">Token</label>
                             <input class="form-control" type="token" name="token" id="token" placeholder="insert token" required>
@@ -21,12 +26,7 @@
                             </div>
                         </div>
                         <div class="d-grid gap-2 mb-3">
-                            <button class="btn btn-success">Submit</button>
-                        </div>
-                    </form>
-                    <form action="/user/token" method="POST">
-                        <div class="d-grid gap-2 mb-3">
-                            <button class="btn btn-warning">Kirim ulang token</button>
+                            <button class="btn btn-success">Sumbit</button>
                         </div>
                     </form>
                 </div>

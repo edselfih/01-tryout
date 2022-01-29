@@ -1,0 +1,30 @@
+<% layout('layout/template.ejs') %>
+<div class="row">
+    <h1 class="text-center">Updating User</h1>
+    <div class="col-sm-6 offset-sm-3">
+        <form action="/user/<%= user._id %>?_method=PATCH" method="POST" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" value="<%= user.username %>" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="text" class="form-control" id="email" name="email" value="<%= user.email %>" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label"><b>New</b> Password</label>
+                <input type="text" class="form-control" id="password" name="password" autofocus required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+    </div>
+</div>

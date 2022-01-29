@@ -11,3 +11,11 @@ module.exports.isLogin = async (req, res, next) => {
     }
     next()
 }
+
+module.exports.isVerifiedEmail = async (req, res, next) => {
+    if(!req.session.validUser){
+        req.flash('error', 'email tidak terverifikasi');
+        return res.redirect('/login')
+    }
+    next()
+}

@@ -1,4 +1,3 @@
-const { findOne } = require('../models/user.js');
 const User = require('../models/user.js');
 const UserVerification = require('../models/userVerification.js');
 const {generateToken, transporter } = require('../utilities/mail.js');
@@ -105,20 +104,23 @@ module.exports.resendToken = async (req, res) => {
     await userVerification.save();
     const newToken = await transporter.sendMail({
         from: 'edselfih@gmail.com',
-        to: user.email,
+        to: user.email || req.session.hideEmailInForgotPage,
         subject: 'verify your account',
         html: mailVerification(token)
     })
+    console.log(user)
     res.redirect('/user/verification')
 }
 
 module.exports.updateUserPasswordPage = async (req, res) => {
-    res.render('./user/forgot');
+    const hideEmailInForgotPage = req.session.hideEmailInForgotPage // didefine kesini = null = false
+    res.render('./user/forgot', {hideEmailInForgotPage});
 }
 
 module.exports.updateUserPasswordToken = async (req, res) => {
     const {email} = req.body
-    const token = generateToken()
+    req.session.hideEmailInForgotPage = email // saat submit dimasukin email jadi true
+        const token = generateToken()
     const userVerification = new UserVerification({
         owner: await User.findOne({email}),
         token
@@ -153,6 +155,7 @@ module.exports.updateUserPassword = async (req, res) => {
             req.flash('error', 'Token salah');
             res.redirect(`/user/forgot`);
         }
+        req.session.validUser = true
         await UserVerification.findByIdAndDelete(storedToken._id)
         res.redirect(`/user/${user._id}/update`)
     } catch (e) {
@@ -162,10 +165,10 @@ module.exports.updateUserPassword = async (req, res) => {
 }
 
 module.exports.updateUserPage = async (req, res) => {
-    req.session.userEmail = null
+    req.session.userEmail = null;
+    req.session.hideEmailInForgotPage = null
     const {userId} = req.params
     const user = await User.findById(userId)
-    console.log(user._id)
     res.render('./user/update', {user});
 }
 
@@ -174,5 +177,5 @@ module.exports.updateUser = async (req, res) => {
     const user = await User.findOne({username});
     await user.setPassword(password);
     await user.save()
-    res.redirect('/')
+    res.redirect('/login')
 }

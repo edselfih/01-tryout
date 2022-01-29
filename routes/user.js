@@ -3,26 +3,27 @@ const router = express.Router({mergeParams: true});
 const catchAsync = require('../utilities/catchAsync.js');
 const userController = require('../controllers/user')
 const passport = require('passport');
+const {isVerifiedEmail} = require('../utilities/middleware')
 
 router.route('/user/forgot')
-    .get(userController.updateUserPasswordPage)
-    .post(userController.updateUserPassword)
+    .get(catchAsync(userController.updateUserPasswordPage))
+    .post(catchAsync(userController.updateUserPassword))
 
 router.route('/user/forgot/t')
-    .post(userController.updateUserPasswordToken)
+    .post(catchAsync(userController.updateUserPasswordToken))
 
 router.route('/user/token')
-    .post(userController.resendToken)
+    .post(catchAsync(userController.resendToken))
 
 router.route('/user/verification')
-    .get(userController.userVerificationPage)
-    .post(userController.userVerification)
+    .get(catchAsync(userController.userVerificationPage))
+    .post(catchAsync(userController.userVerification))
 
 router.route('/user/:userId/update')
-    .get(userController.updateUserPage)
+    .get(isVerifiedEmail, catchAsync(userController.updateUserPage))
 
 router.route('/user/:userId')
-    .patch(userController.updateUser)
+    .patch(isVerifiedEmail, catchAsync(userController.updateUser))
 
 router.route('/user')
     .get(catchAsync(userController.createUserPage))

@@ -6,16 +6,25 @@
                 <div class="card-body">
                     <h3 class="card-title">Forgot Password</h3>
                     <form  action="/user/forgot/t" method="POST" class="needs-validation" novalidate>
+                        <div class="collapse <% if(!hideEmailInForgotPage) { console.log(hideEmailInForgotPage)%>show<% } %>  " id="collapseForm">
                         <div class="mb-3" >
                             <label class="form-label" for="email">Email</label>
-                            <input class="form-control" type="email" name="email" id="email" placeholder="insert email" required>
+                            <input class="form-control" type="email" name="email" id="email" value="<%=hideEmailInForgotPage%>" placeholder="insert email" required>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>
                         </div>
-                        <div class="d-grid gap-2 mb-3">
-                            <button class="btn btn-success">Send Token</button>
                         </div>
+                        <div class="d-grid gap-2 mb-3">
+                            <button class="btn btn-success">Send token<% if(hideEmailInForgotPage) { console.log(hideEmailInForgotPage)%> again<% } %></button>
+                        </div>
+                        <% if(hideEmailInForgotPage) { %>
+                        <div class="d-grid gap-2 mb-3">
+                            <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseForm" role="button" aria-expanded="false" aria-controls="collapseForm">
+                                Change email
+                            </a>
+                        </div>
+                        <% } %> 
                     </form>
                     <form  action="/user/forgot" method="POST" class="needs-validation" novalidate>
                         <div class="mb-3" >

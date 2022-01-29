@@ -3,7 +3,7 @@ const router = express.Router();
 
 const catchAsync = require('../utilities/catchAsync.js');
 const tryoutController = require('../controllers/tryout');
-const {isLogin} = require('../utilities/mildeware')
+const {isLogin} = require('../utilities/middleware')
 
 router.route('/')
     .get( tryoutController.index )

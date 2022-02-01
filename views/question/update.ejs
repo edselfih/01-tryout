@@ -1,0 +1,25 @@
+<% layout('layout/template.ejs') %>
+<h1 class="text-center mb-3">Updating Question</h1>
+    <div class="card card-body">
+        <div class="form-check mb-3 ps-1 pe-1">
+            <form action="/tryout/<%=tryouts._id %>/question/<%=questions._id%>?_method=PUT" method="POST" class="needs-validation" novalidate>
+                <label for="question" class="form-label">Question</label>
+                <textarea class="form-control mb-3" id="question" name="question[question]" rows="3"><%= questions.question %></textarea>
+                <div class="d-flex align-self-start bd-highlight">
+                    <div class="d-flex flex-column bd-highlight mb-3">
+                        <% const key = ['a','b','c','d','e'] %> 
+                        <% for( let i = 0 ; i < 5 ; i++) { %> 
+                            <input type="radio" class="btn-check" id="btn-check-outlined-<%=i%>" name="question[key]" value="<%= key[i] %>" autocomplete="off" <%= questions.key == key[i] ? 'checked' : '' %>>
+                            <label class="btn btn-outline-primary mb-3" for="btn-check-outlined-<%=i%>">jawaban</label>
+                        <% } %> 
+                    </div>
+                    <div class="d-flex flex-column bd-highlight flex-grow-1 mb-3 ms-2">
+                        <% for( let i = 0 ; i < 5 ; i++) { %>
+                        <input class="form-control mb-3" type="text" name="choice" id="btn-check-outlined-<%= i%>" value="<%= questions.choice[i] %>">
+                        <% } %> 
+                    </div>
+                </div>
+                <button class="btn btn-success">Update</button>
+            </form>
+        </div>
+    </div>

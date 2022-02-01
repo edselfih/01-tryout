@@ -6,14 +6,14 @@ const questionSchema = new Schema ({
         type: String,
         required : true
     },
-    choice: {
-         type: [String],
-         required : true
-    },
-    answer: {
+    key: {
         type: String,
         required : true
     },
+    choice: {
+        type: [String],
+        required: true
+    }
 })
 
 module.exports = mongoose.model('Question', questionSchema)

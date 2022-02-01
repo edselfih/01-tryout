@@ -21,6 +21,7 @@ const mongoStore = require('connect-mongo');
 // Local Modules
 const tryoutRoutes = require('./routes/tryout');
 const userRoutes = require('./routes/user');
+const questionRoutes = require('./routes/question');
 
 const User = require('./models/user');
 const AppError = require('./utilities/AppError.js');
@@ -120,6 +121,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/tryout', tryoutRoutes);
+app.use('/tryout/:tryoutId/question', questionRoutes); 
 app.use('/', userRoutes);
 app.get('/', (req, res) => {
     res.render('index')

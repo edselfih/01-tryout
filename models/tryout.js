@@ -11,6 +11,15 @@ const tryoutSchema = new Schema ({
         required : true
     },
     image:  String,
+    // harus dikasih array biar bisa dipush
+    question : [{
+        type: Schema.Types.ObjectId,
+        ref: 'Question'
+    }],
+    author : {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }
 })
 
 module.exports = mongoose.model('Tryout', tryoutSchema)

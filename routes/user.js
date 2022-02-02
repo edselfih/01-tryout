@@ -5,6 +5,7 @@ const userController = require('../controllers/user')
 const passport = require('passport');
 const {isVerifiedEmail} = require('../utilities/middleware')
 
+// AUTH USER
 router.route('/user/forgot')
     .get(catchAsync(userController.updateUserPasswordPage))
     .post(catchAsync(userController.updateUserPassword))
@@ -34,5 +35,9 @@ router.route('/login')
     .post(passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }), catchAsync(userController.login))
 
 router.get( '/logout', catchAsync(userController.logout))
+
+// ANSWER TO
+router.post('/user/:userId/tryout/:tryoutId/result',catchAsync(userController.answerQuestion))
+router.get('/user/:userId/tryout/:tryoutId/result/:resultId', catchAsync(userController.resultPage))
 
 module.exports = router

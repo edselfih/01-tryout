@@ -1,4 +1,5 @@
 const question = require('../models/question.js');
+const Question = require('../models/question.js');
 const Tryout = require('../models/tryout.js');
 
 module.exports.index = async (req, res) => {
@@ -44,6 +45,10 @@ module.exports.updateTryout = async (req, res) => {
 
 module.exports.deleteTryout = async (req, res) => {
     const {tryoutId} = req.params
+    const tryout = await Tryout.findById(tryoutId)
+    for (const question of tryout.question) {
+        await Question.findByIdAndDelete(question._id)
+    }
     await Tryout.findByIdAndDelete(tryoutId)
     res.redirect('/tryout')
 }

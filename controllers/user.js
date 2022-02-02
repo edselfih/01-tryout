@@ -1,9 +1,12 @@
 const User = require('../models/user.js');
+const Result = require('../models/result.js');
+const Tryout = require('../models/tryout.js');
+const QuestionMark = require('../models/questionMark.js');
 const UserVerification = require('../models/userVerification.js');
 const {generateToken, transporter } = require('../utilities/mail.js');
 const {mailVerification} = require('../utilities/mailVerification.js');
 
-
+// AUTH USER
 module.exports.createUserPage = async (req, res) => {
     res.render('./user/create');
 }
@@ -18,13 +21,13 @@ module.exports.createUser = async (req, res) => {
             token
         })
         await userVerification.save();
+        const newUser = await User.register(user, password);
         const newToken = await transporter.sendMail({
             from: 'edselfih@gmail.com',
             to: newUser.email,
-            subject,
+            subject: 'Verify your account',
             html: mailVerification(token)
         })
-        const newUser = await User.register(user, password);
         // console.log(newUser, newToken);
         req.flash('success', 'verifikasi akun melalui email anda')
         res.redirect('/user/verification')
@@ -61,6 +64,7 @@ module.exports.userVerificationPage = async (req, res) => {
     res.render('./user/verification');
 }
 
+// cek kenapa masih pake try catch
 module.exports.userVerification = async (req, res) => {
     try{
         const {username, token} = req.body;
@@ -178,4 +182,47 @@ module.exports.updateUser = async (req, res) => {
     await user.setPassword(password);
     await user.save()
     res.redirect('/login')
+}
+
+// ANSWER TO
+module.exports.answerQuestion = async (req, res) => {
+    const {tryoutId, userId} = req.params;
+    const {answer} = req.body;
+    const tryout = await Tryout.findById(tryoutId).populate('question');
+    let mark = 0;
+    const questionMark = []
+    for (const question of tryout.question) {
+        const userAnswer = answer[`${question._id}`] === question.key
+        if(userAnswer) {
+            const newQuestionMark = new QuestionMark({question : question._id, answer: answer[`${question._id}`] ,value: true})
+            questionMark.push(newQuestionMark)
+            await newQuestionMark.save()
+            mark++
+        } else {
+            const newQuestionMark = new QuestionMark({question : question._id, answer: answer[`${question._id}`] ,value: false})
+            questionMark.push(newQuestionMark)
+            await newQuestionMark.save()
+        }
+    }
+    const user = await User.findById(userId)
+    const newResult = new Result({tryout: tryout._id, questionMark, mark})
+    await newResult.save()
+    user.result = newResult
+    await user.save()
+    // res.send()
+    res.redirect(`/user/${user._id}/tryout/${tryout._id}/result/${newResult._id}`)
+} // nanti tolong dibuatkan agar bisa diketahui soal mana yang salah
+
+module.exports.resultPage = async (req, res) => {
+    const {userId, tryoutId, resultId} = req.params
+    const users = await User.findById(userId);
+    const tryouts = await Tryout.findById(tryoutId).populate('question');
+    const results = await Result.findById(resultId).populate({
+        path: 'questionMark',
+        populate: {
+            path: 'question'
+        }
+    });
+    console.log(results)
+    res.render('./question/user/read', {tryouts, users, results})
 }

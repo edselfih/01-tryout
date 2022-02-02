@@ -9,7 +9,7 @@
                     <div class="d-flex flex-column bd-highlight mb-3">
                         <% const key = ['a','b','c','d','e'] %> 
                         <% for( let i = 0 ; i < 5 ; i++) { %> 
-                            <input type="radio" class="btn-check" id="btn-check-outlined-<%=i%>" name="question[key]" value="<%= key[i] %>" autocomplete="off" <%= questions.key == key[i] ? 'checked' : '' %>>
+                            <input type="radio" class="btn-check" id="btn-check-outlined-<%=i%>" name="question[key]" value="<%= key[i] %>" autocomplete="off"  <%= questions.key == key[i] ? 'checked' : '' %>>
                             <label class="btn btn-outline-primary mb-3" for="btn-check-outlined-<%=i%>">jawaban</label>
                         <% } %> 
                     </div>

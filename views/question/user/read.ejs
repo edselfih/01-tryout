@@ -1,0 +1,29 @@
+<% layout('layout/template.ejs') %>
+<h1 class="text-center mb-3">Tryout Result</h1>
+<h3 class="text-center mb-3">Poin anda: <%= results.mark %> </h3>
+
+<div class="card card-body mb-3">
+    <% const setQuestionMark = [] %> 
+    <% for ( const questionMark of results.questionMark) { %>
+        <p><%= questionMark.question.question %> </p>
+        <div class="form-check mb-3">
+            <% for( let i = 0 ; i < 5 ; i++) { %>
+                <div>
+                    <% const key = ['a','b','c','d','e'] %>
+                    <input class="form-check-input" type="radio" name="answer-<%=questionMark._id%>" id="radio-excercice-<%=questionMark._id%>" value="<%= key[i] %>" <%= questionMark.answer == key[i] ? 'checked' : '' %> disabled style="opacity: 1;">
+                    <label class="form-check-label" for="radio-excercise-<%=questionMark._id%>" style="opacity: 1;">
+                      <%= questionMark.question.choice[i] %> 
+                    </label>
+                </div>
+            <% } %> 
+        </div>
+            <% if (questionMark.value) { %>
+                <p style="color: #198754;" ><b>Jawaban anda benar</b></p>
+            <% } else { %>
+                <p class="mb-1" style="color: #dc3545;" ><b>Jawaban anda salah</b></p>
+                <p><b>Kunci: <%= questionMark.question.key.toUpperCase() %></b></p>
+            <% } %> 
+            
+        <hr class="mt-0">
+    <% } %>  
+</div>

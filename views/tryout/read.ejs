@@ -8,7 +8,7 @@
 <h1><%= tryouts.title %> Tryout</h1>
 <p><%= tryouts.description %> </p>
 
-<p class="d-inline"></p>
+<p class="d-inline">
     <% if(!user.admin) { %> 
         <a class="btn btn-primary mb-3" data-bs-toggle="collapse" href="#problem-set" role="button" id="start" aria-expanded="false" aria-controls="collapseExample" onclick="disableButton(this)" >
           Mulai
@@ -29,12 +29,13 @@
                     <a class="btn btn-warning " data-bs-toggle="collapse" href="#add-question" role="button" id="start" aria-expanded="false" aria-controls="collapseExample">Add Question</a>
                 </div>
                 <div class="col mb-2 pe-0">
-                    <a class="btn btn-primary" data-bs-toggle="collapse" href="#problem-set" role="button" id="start" aria-expanded="false" aria-controls="collapseExample">Problem Set</a>
+                    <a class="btn btn-primary" data-bs-toggle="collapse" href="#problem-set-admin" role="button" id="start" aria-expanded="false" aria-controls="collapseExample">Problem Set</a>
                 </div>
             </div>
         </div>
     <% } %>
 </p>
+<!-- admin: untuk menambah question -->
 <div class="collapse mb-3" id="add-question">
     <div class="card card-body">
         <div class="form-check mb-3 ps-1 pe-1">
@@ -60,21 +61,22 @@
         </div>
     </div>
 </div>
-<div class="collapse mt-3" id="problem-set">
+<!-- admin: untuk read, edit, delete question -->
+<div class="collapse mt-3" id="problem-set-admin">
     <div class="card card-body mb-3">
         <% for ( question of tryouts.question) { %>
             <p><%= question.question %> </p>
             <div class="form-check mb-3">
                 <% for( let i = 0 ; i < 5 ; i++) { %>
                     <div>
-                        <input class="form-check-input" type="radio" name="answer" id="answer" value="option[<%= i %>]">
-                        <label class="form-check-label" for="answer">
+                        <input class="form-check-input" type="radio" name="answer" id="radio-result-<%=i%>" value="option[<%= i %>]">
+                        <label class="form-check-label" for="radio-result-<%=i%>">
                           <%= question.choice[i] %> 
                         </label>
                     </div>
                 <% } %> 
             </div>
-            <p><b>Key: <%= question.key.toUpperCase() %></b></p>
+            <p><b>Key: <%= question.key.toUpperCase() %></b></p> 
             <div class="row mb-3 justify-content-start">
                 <div class="row row-cols-auto row-cols-sm-auto row-cols-md-auto">
                     <div class="col-md-auto mb-2 pe-0">
@@ -89,5 +91,28 @@
             </div>
             <hr class="mt-0">
         <% } %>  
+    </div>
+</div>
+<!-- user: untuk mengisi ujian -->
+<div class="collapse mt-3" id="problem-set">
+    <div class="card card-body mb-3">
+        <form action="/user/<%=user._id%>/tryout/<%= tryouts._id %>/result" method="POST">
+            <% for ( question of tryouts.question) { %>
+                <p><%= question.question %> </p>
+                <div class="form-check mb-3">
+                    <% const key = ['a','b','c','d','e'] %> 
+                    <% for( let i = 0 ; i < 5 ; i++) { %>
+                        <div>
+                            <input class="form-check-input" type="radio" name="answer[<%= question._id %>]" id="answer" value="<%= key[i] %>">
+                            <label class="form-check-label" for="answer">
+                              <%= question.choice[i] %> 
+                            </label>
+                        </div>
+                    <% } %> 
+                </div>
+                <hr class="mt-0">
+            <% } %>  
+            <button class="btn btn-success">Selesai</button>
+        </form>
     </div>
 </div>

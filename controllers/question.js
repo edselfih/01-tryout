@@ -17,7 +17,7 @@ module.exports.updateQuestionPage = async (req, res) => {
     const tryouts  = await Tryout.findById(tryoutId);
     const questions = await Question.findById(questionId);
     console.log(tryouts)
-    res.render(`./question/update`, {questions, tryouts});
+    res.render(`./question/admin/update`, {questions, tryouts});
 };
 
 module.exports.updateQuestion = async (req, res) => {
@@ -29,6 +29,7 @@ module.exports.updateQuestion = async (req, res) => {
 
 module.exports.deleteQuestion = async (req, res) => {
     const {tryoutId, questionId} = req.params
+    await Tryout.findByIdAndUpdate(tryoutId, {$pull: {question: questionId}})
     await Question.findByIdAndDelete(questionId)
     res.redirect(`/tryout/${tryoutId}`)
 }

@@ -16,23 +16,16 @@
           <a class="nav-link" href="/user">Register</a>
         <% } else { %> 
           <a class="nav-link" href="/logout">Logout</a>
+          <% if ( user.admin) { %>
+            <a class="nav-link" href="/tryout/create">Create Tryout</a>
+          <% } %> 
         <% } %> 
       </div>
     </div>
   </div>
 </nav>
 
-<!-- <script type="text/javascript">
-  setInterval(function() {
-    const navHeight = document.getElementById("navbar").offsetHeight
-    function changeBg () {
-      if (window.scrollY > navHeight) {
-        document.getElementById("navbar").classList.add("scrolled");
-      }
-    };
-  })
-</script> -->
-
+<!-- press button script -->
 <script type="text/javascript">
   let i = 0
   const changeBg = function () {
@@ -46,9 +39,9 @@
   };
 </script>
 
+<!-- scroll navbar script -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
 crossorigin="anonymous"></script>
-
 <script>
 $(function () {
     $(document).scroll(function () {

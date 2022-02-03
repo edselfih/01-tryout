@@ -9,7 +9,7 @@ async function main() {
     console.log('sukses')
 }
 const seeding = async () => {
-    await User.deleteMany({})
+    await User.findByIdAndUpdate('61f9158c752b6f2c64f5193a', {$pull: {result: '61fa1ceba7dc12fbdaf2b935'}})
 }
 
 seeding().then( ()=> {

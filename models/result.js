@@ -5,6 +5,7 @@ const Schema = mongoose.Schema
 const resultSchema = new Schema ({
     tryout: {
         type: Schema.Types.ObjectId,
+        unique : true,
         required: true,
         ref: 'Tryout'
     },

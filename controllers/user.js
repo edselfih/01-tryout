@@ -188,31 +188,41 @@ module.exports.updateUser = async (req, res) => {
 module.exports.answerQuestion = async (req, res) => {
     const {tryoutId, userId} = req.params;
     const {answer} = req.body;
-    const tryout = await Tryout.findById(tryoutId).populate('question');
-    let mark = 0;
-    const questionMark = []
-    for (const question of tryout.question) {
-        const userAnswer = answer[`${question._id}`] === question.key
-        if(userAnswer) {
-            const newQuestionMark = new QuestionMark({question : question._id, answer: answer[`${question._id}`] ,value: true})
-            questionMark.push(newQuestionMark)
-            await newQuestionMark.save()
-            mark++
-        } else {
-            const newQuestionMark = new QuestionMark({question : question._id, answer: answer[`${question._id}`] ,value: false})
-            questionMark.push(newQuestionMark)
-            await newQuestionMark.save()
+    const user = await User.findById(userId);
+    if (user.result.tryout) {
+        for (const result of user.result) {
+            console.log(result)
+            if ( result._id === tryout._id ) {
+                req.flash('error', 'Submit hanya bisa dilakukan sekali');
+                res.redirect(`/tryout/${tryoutId}`);
+            }
         }
+    } else {
+        const tryout = await Tryout.findById(tryoutId).populate('question');
+        let mark = 0;
+        const questionMark = []
+        for (const question of tryout.question) {
+            const userAnswer = answer[`${question._id}`] === question.key
+            if(userAnswer) {
+                const newQuestionMark = new QuestionMark({question : question._id, answer: answer[`${question._id}`] ,value: true})
+                questionMark.push(newQuestionMark)
+                await newQuestionMark.save()
+                mark++
+            } else {
+                const newQuestionMark = new QuestionMark({question : question._id, answer: answer[`${question._id}`] ,value: false})
+                questionMark.push(newQuestionMark)
+                await newQuestionMark.save()
+            }
+        }
+        const newResult = new Result({tryout: tryout._id, questionMark, mark})
+        await newResult.save()
+        user.result.push(newResult) 
+        await user.save()
+        // res.send()
+        res.redirect(`/user/${user._id}/tryout/${tryout._id}/result/${newResult._id}/#${user._id}`)
     }
-    const user = await User.findById(userId)
-    const newResult = new Result({tryout: tryout._id, questionMark, mark})
-    await newResult.save()
-    user.result = newResult
-    await user.save()
-    // res.send()
-    res.redirect(`/user/${user._id}/tryout/${tryout._id}/result/${newResult._id}`)
-} // nanti tolong dibuatkan agar bisa diketahui soal mana yang salah
-
+}
+    
 module.exports.resultPage = async (req, res) => {
     const {userId, tryoutId, resultId} = req.params
     const users = await User.findById(userId);
@@ -223,6 +233,5 @@ module.exports.resultPage = async (req, res) => {
             path: 'question'
         }
     });
-    console.log(results)
-    res.render('./question/user/read', {tryouts, users, results})
+    res.render(`./question/user/read`, {tryouts, users, results})
 }

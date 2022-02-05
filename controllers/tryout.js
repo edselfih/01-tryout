@@ -1,4 +1,4 @@
-const question = require('../models/question.js');
+const User = require('../models/user.js');
 const Question = require('../models/question.js');
 const Tryout = require('../models/tryout.js');
 
@@ -9,6 +9,7 @@ module.exports.index = async (req, res) => {
 
 module.exports.readTryout = async (req, res) => {
     const {tryoutId} = req.params;
+    const user = await User.findById(req.user._id).populate('result');
     const tryouts = await Tryout.findById(tryoutId).populate('question');
     // console.log(tryoutId)
     // console.log(tryouts)
@@ -16,7 +17,7 @@ module.exports.readTryout = async (req, res) => {
         req.flash('error', 'tryout tidak ditemukan')  
         return res.redirect('/tryout')
     }
-    res.render('./tryout/read', {tryouts});
+    res.render('./tryout/read', {tryouts, user});
 };
 
 module.exports.createTryoutPage = async (req, res) => {

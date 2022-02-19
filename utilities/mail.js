@@ -12,7 +12,8 @@ module.exports.generateToken = () => {
 module.exports.transporter = nodemailer.createTransport({
     service: 'gmail',
     host: 'smtp.gmail.com',
-    secure: true,
+    ignoreTLS: false,
+    secure: false,
     auth: {
         user: process.env.GMAIL_USER,
         pass: process.env.GMAIL_PASS

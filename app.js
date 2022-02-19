@@ -49,12 +49,11 @@ app.use(mongoSanitize({
 
 // Basic Securities
 const scriptSrcUrls = [
-    "https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js",
-    "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js",
-    "https://code.jquery.com/"
+    "https://code.jquery.com/jquery-3.3.1.slim.min.js",
+    "https://cdn.jsdelivr.net/"
 ];
 const styleSrcUrls = [
-    "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+    "https://cdn.jsdelivr.net/"
 ];
 const connectSrcUrls = [
     // "https://",
@@ -63,14 +62,15 @@ const fontSrcUrls = [
     // "https://"
 ];
 
-// kyk udah diblok gitu kalau sekali salah
+// kyk udah diblok gitu kalau sekali salah hapus session/cache
 app.use(
     helmet.contentSecurityPolicy({
         directives: {
+            "script-src-attr": ["'unsafe-inline'"],
             defaultSrc: [],
             connectSrc: ["'self'", ...connectSrcUrls],
             scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
-            styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls, ...scriptSrcUrls],
+            styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
             workerSrc: ["'self'", "blob:"],
             objectSrc: [],
             imgSrc: [

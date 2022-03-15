@@ -22,6 +22,7 @@ const mongoStore = require('connect-mongo');
 const tryoutRoutes = require('./routes/tryout');
 const userRoutes = require('./routes/user');
 const questionRoutes = require('./routes/question');
+const paymentRoutes = require('./routes/payment');
 
 const User = require('./models/user');
 const AppError = require('./utilities/AppError.js');
@@ -56,33 +57,33 @@ const styleSrcUrls = [
     "https://cdn.jsdelivr.net/"
 ];
 const connectSrcUrls = [
-    // "https://",
+    "https://api.sandbox.midtrans.com"
 ];
 const fontSrcUrls = [
     // "https://"
 ];
 
 // kyk udah diblok gitu kalau sekali salah hapus session/cache
-app.use(
-    helmet.contentSecurityPolicy({
-        directives: {
-            "script-src-attr": ["'unsafe-inline'"],
-            defaultSrc: [],
-            connectSrc: ["'self'", ...connectSrcUrls],
-            scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
-            styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
-            workerSrc: ["'self'", "blob:"],
-            objectSrc: [],
-            imgSrc: [
-                "'self'",
-                "blob:",
-                "data:",
-                "https://image.freepik.com/",
-                ],
-            fontSrc: ["'self'", ...fontSrcUrls],
-        },
-    })
-);
+// app.use(
+//     helmet.contentSecurityPolicy({
+//         directives: {
+//             "script-src-attr": ["'unsafe-inline'"],
+//             defaultSrc: [],
+//             connectSrc: ["'self'", ...connectSrcUrls],
+//             scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+//             styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+//             workerSrc: ["'self'", "blob:"],
+//             objectSrc: [],
+//             imgSrc: [
+//                 "'self'",
+//                 "blob:",
+//                 "data:",
+//                 "https://image.freepik.com/",
+//                 ],
+//             fontSrc: ["'self'", ...fontSrcUrls],
+//         },
+//     })
+// );
 
 // Sessions
 const secret = process.env.SECRET || 'inirahasibangetlahpokoknya150122';
@@ -124,6 +125,7 @@ app.use((req, res, next) => {
 });
 
 // Routes
+app.use('/payment', paymentRoutes);
 app.use('/tryout', tryoutRoutes);
 app.use('/tryout/:tryoutId/question', questionRoutes); 
 app.use('/', userRoutes);

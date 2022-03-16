@@ -9,7 +9,7 @@ async function main() {
     console.log('sukses')
 }
 const seeding = async () => {
-    await User.findByIdAndUpdate('61f9158c752b6f2c64f5193a', {$pull: {result: '61fa1ceba7dc12fbdaf2b935'}})
+    await User.findByIdAndUpdate('6210b796397bab250fdb2f1d', {$pull: {tryout: '623206d7f1ec737335330710'}})
 }
 
 seeding().then( ()=> {

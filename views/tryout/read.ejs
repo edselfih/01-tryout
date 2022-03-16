@@ -53,6 +53,11 @@
             </div>
         </div>
     <% } %>
+    <% if(!user.tryout.includes(tryouts._id)){ %> 
+    <a class="btn btn-warning mb-3" href="/tryout/<%= tryouts._id %>/payment">
+        Beli Tryout
+    </a>
+    <% } %> 
 </p>
 <!-- admin: untuk menambah question -->
 <div class="collapse mb-3" id="add-question">
@@ -162,7 +167,7 @@
         //     var countDownDate = new Date(timerUp).getTime();
     
         // jika waktu dimulai dari spesiifik time tidak bergantung mulai
-            var countDownDate = new Date("Feb 5, 2022 16:55:30 GMT+07:00").getTime() 
+            var countDownDate = new Date("Mar 16, 2022 16:55:30 GMT+07:00").getTime() 
         // Update the count down every 1 second
         var x = setInterval(function() {
     

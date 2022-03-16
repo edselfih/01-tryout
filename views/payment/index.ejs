@@ -1,7 +1,12 @@
 <% layout('layout/template.ejs') %>
-    <h1>Tes Payment</h1>
-    <div class="col-sm-6 offset-sm-3">
-        <form action="/payment" method="POST" class="needs-validation" novalidate>
+    <div class="col-md-6 offset-md-3">
+        <h1><%= tryouts.title %></h1>
+        <img src="<% tryouts.image %>" alt="">
+        <p>Harga: <%= tryouts.price %> </p>
+        <form action="/tryout/<%=tryouts._id%>/payment" method="POST">
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+        <!-- <form action="/payment" method="POST" class="needs-validation" novalidate>
             <div class="mb-3">
                 <label for="payment_type" class="form-label">payment_type</label>
                 <input type="text" class="form-control" id="payment_type" name="payment_type" placeholder="Input payment_type" value="gopay"  required>
@@ -84,8 +89,10 @@
             </div>
             <h3>gopay</h3>
             <div class="mb-3">
-                <input type="checkbox" id="enable_callback" name="gopay[enable_callback]" >
-                <label for="enable_callback"> enable_callback</label><br>
+                <select name="gopay[enable_callback]" id="enable_callback">
+                    <option value=true>true</option>
+                    <option value=false>false</option>
+                </select>
             </div>
             <div class="mb-3">
                 <label for="callback_url" class="form-label">callback_url</label>
@@ -95,5 +102,5 @@
                 </div>
             </div>
             <button type="submit" class="btn btn-success">Submit</button>
-        </form>
+        </form> -->
     </div>

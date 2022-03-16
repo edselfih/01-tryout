@@ -22,7 +22,6 @@ const mongoStore = require('connect-mongo');
 const tryoutRoutes = require('./routes/tryout');
 const userRoutes = require('./routes/user');
 const questionRoutes = require('./routes/question');
-const paymentRoutes = require('./routes/payment');
 
 const User = require('./models/user');
 const AppError = require('./utilities/AppError.js');
@@ -125,7 +124,6 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use('/payment', paymentRoutes);
 app.use('/tryout', tryoutRoutes);
 app.use('/tryout/:tryoutId/question', questionRoutes); 
 app.use('/', userRoutes);

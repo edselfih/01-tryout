@@ -11,6 +11,7 @@ const tryoutSchema = new Schema ({
         required : true
     },
     image:  String,
+    price: Number,
     // harus dikasih array biar bisa dipush
     question : [{
         type: Schema.Types.ObjectId,

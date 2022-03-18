@@ -56,33 +56,33 @@ const styleSrcUrls = [
     "https://cdn.jsdelivr.net/"
 ];
 const connectSrcUrls = [
-    // "https://",
+    "https://api.sandbox.midtrans.com"
 ];
 const fontSrcUrls = [
     // "https://"
 ];
 
 // kyk udah diblok gitu kalau sekali salah hapus session/cache
-app.use(
-    helmet.contentSecurityPolicy({
-        directives: {
-            "script-src-attr": ["'unsafe-inline'"],
-            defaultSrc: [],
-            connectSrc: ["'self'", ...connectSrcUrls],
-            scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
-            styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
-            workerSrc: ["'self'", "blob:"],
-            objectSrc: [],
-            imgSrc: [
-                "'self'",
-                "blob:",
-                "data:",
-                "https://image.freepik.com/",
-                ],
-            fontSrc: ["'self'", ...fontSrcUrls],
-        },
-    })
-);
+// app.use(
+//     helmet.contentSecurityPolicy({
+//         directives: {
+//             "script-src-attr": ["'unsafe-inline'"],
+//             defaultSrc: [],
+//             connectSrc: ["'self'", ...connectSrcUrls],
+//             scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+//             styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+//             workerSrc: ["'self'", "blob:"],
+//             objectSrc: [],
+//             imgSrc: [
+//                 "'self'",
+//                 "blob:",
+//                 "data:",
+//                 "https://image.freepik.com/",
+//                 ],
+//             fontSrc: ["'self'", ...fontSrcUrls],
+//         },
+//     })
+// );
 
 // Sessions
 const secret = process.env.SECRET || 'inirahasibangetlahpokoknya150122';

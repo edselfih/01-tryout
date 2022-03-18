@@ -21,6 +21,10 @@ const userSchema = new Schema ({
         required: true,
         ref: 'Result'
     }],
+    tryout: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Tryout'
+    }]
 })
 
 userSchema.plugin(passportLocalMongoose)

@@ -1,0 +1,106 @@
+<% layout('layout/template.ejs') %>
+    <div class="col-md-6 offset-md-3">
+        <h1><%= tryouts.title %></h1>
+        <img src="<% tryouts.image %>" alt="">
+        <p>Harga: <%= tryouts.price %> </p>
+        <form action="/tryout/<%=tryouts._id%>/payment" method="POST">
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+        <!-- <form action="/payment" method="POST" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="payment_type" class="form-label">payment_type</label>
+                <input type="text" class="form-control" id="payment_type" name="payment_type" placeholder="Input payment_type" value="gopay"  required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <h3>transaction detail</h3>
+            <div class="mb-3">
+                <label for="order_id" class="form-label">order_id</label>
+                <input type="text" class="form-control" id="order_id" name="transaction_details[order_id]" placeholder="Input order_id" autofocus required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="gross_amount" class="form-label">gross_amount</label>
+                <input type="text" class="form-control" id="gross_amount" name="transaction_details[gross_amount]" placeholder="Input gross_amount" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <h3>item detail</h3>
+            <div class="mb-3">
+                <label for="id" class="form-label">id</label>
+                <input type="text" class="form-control" id="id" name="item_details[id]" placeholder="Input id" autofocus required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">price</label>
+                <input type="text" class="form-control" id="price" name="item_details[price]" placeholder="Input price" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="quantity" class="form-label">quantity</label>
+                <input type="text" class="form-control" id="quantity" name="item_details[quantity]" placeholder="Input quantity" autofocus required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="name" class="form-label">name</label>
+                <input type="text" class="form-control" id="name" name="item_details[name]" placeholder="Input name" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <h3>customer detail</h3>
+            <div class="mb-3">
+                <label for="first_name" class="form-label">first_name</label>
+                <input type="text" class="form-control" id="first_name" name="customer_details[first_name]" placeholder="Input first name" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="last_name" class="form-label">last_name</label>
+                <input type="text" class="form-control" id="last_name" name="customer_details[last_name]" placeholder="Input last name" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">email</label>
+                <input type="email" class="form-control" id="email" name="customer_details[email]" placeholder="Input your email" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label">phone</label>
+                <input type="phone" class="form-control" id="phone" name="customer_details[phone]" placeholder="Input your phone number" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <h3>gopay</h3>
+            <div class="mb-3">
+                <select name="gopay[enable_callback]" id="enable_callback">
+                    <option value=true>true</option>
+                    <option value=false>false</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="callback_url" class="form-label">callback_url</label>
+                <input type="text" class="form-control" id="callback_url" name="gopay[callback_url]" placeholder="Input callback_url" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form> -->
+    </div>

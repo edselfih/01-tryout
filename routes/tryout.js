@@ -17,6 +17,13 @@ router.route('/:tryoutId')
     .put( isLogin, tryoutController.updateTryout )
     .delete( isLogin, tryoutController.deleteTryout )
 
+router.route('/:tryoutId/payment')
+    .get( catchAsync(tryoutController.createPaymentPage))
+    .post( catchAsync(tryoutController.createPayment))
+
+router.route('/:tryoutId/payment/:orderId')
+    .get( catchAsync(tryoutController.confirmPayment))
+
 router.route('/:tryoutId/update')
     .get( isLogin, tryoutController.updateTryoutPage );
 

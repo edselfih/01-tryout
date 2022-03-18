@@ -14,21 +14,30 @@
 <!-- button: -->
 <p class="d-inline">
     <% if(!user.admin) { %>
-        <% let isDone = '' ; let resultId = ''%>
-        <% for (const result of user.result) {%>
-            <% if(result.tryout.equals(tryouts._id)) {%>
-                <% isDone = result.tryout ; resultId = result._id %> 
-            <% } %>  
-        <% } %> 
-        <% if (!isDone || !isDone.equals(tryouts._id)) { %>
-            <a class="btn btn-primary mb-3" data-bs-toggle="collapse" href="#problem-set" role="button" id="start" aria-expanded="false" aria-controls="collapseExample" onclick="startTryout(this)" >
-                Mulai
+        <% if(!user.tryout.includes(tryouts._id)){ %> 
+            <a class="btn btn-warning mb-3" href="/tryout/<%= tryouts._id %>/payment">
+                Beli Tryout
             </a>
         <% } else { %>
-            <a class="btn btn-primary mb-3" href="/user/<%= user._id %>/tryout/<%= tryouts._id %>/result/<%=resultId%>">
-                Lihat Hasil
-            </a>
+
+            <% let isDone = '' ; let resultId = ''%>
+            <% for (const result of user.result) {%>
+                <% if(result.tryout.equals(tryouts._id)) {%>
+                    <% isDone = result.tryout ; resultId = result._id %> 
+                <% } %>  
+            <% } %> 
+            <% if (!isDone || !isDone.equals(tryouts._id)) { %>
+                <a class="btn btn-primary mb-3" data-bs-toggle="collapse" href="#problem-set" role="button" id="start" aria-expanded="false" aria-controls="collapseExample" onclick="startTryout(this)" >
+                    Mulai
+                </a>
+            <% } else { %>
+                <a class="btn btn-primary mb-3" href="/user/<%= user._id %>/tryout/<%= tryouts._id %>/result/<%=resultId%>">
+                    Lihat Hasil
+                </a>
+            <% } %> 
+
         <% } %> 
+
     <% } %>
     <% if(user.admin) { %> 
         <div class="row mb-3 justify-content-start">
@@ -53,6 +62,7 @@
             </div>
         </div>
     <% } %>
+ 
 </p>
 <!-- admin: untuk menambah question -->
 <div class="collapse mb-3" id="add-question">
@@ -162,7 +172,7 @@
         //     var countDownDate = new Date(timerUp).getTime();
     
         // jika waktu dimulai dari spesiifik time tidak bergantung mulai
-            var countDownDate = new Date("Feb 5, 2022 16:55:30 GMT+07:00").getTime() 
+            var countDownDate = new Date("Mar 16, 2022 16:55:30 GMT+07:00").getTime() 
         // Update the count down every 1 second
         var x = setInterval(function() {
     

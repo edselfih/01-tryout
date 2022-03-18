@@ -13,12 +13,20 @@ const userVerificationSchema = new Schema ({
         type: String,
         required: true
     },
+    // sessionActivity: { 
+    //     type: Date, 
+    //     expires: 300, 
+    //     default: Date.now 
+    // },
     createAt: {
         type: Date,
-        expires: 3600,
-        default: Date.now()
+        expires: 300,
+        default: Date.now
     }
 });
+// }, {timestamps: true});
+
+// userVerificationSchema.index({createdAt: 1},{expireAfterSeconds: 300})
 
 userVerificationSchema.pre('save', async function(next) {
     if(this.isModified('token')) {

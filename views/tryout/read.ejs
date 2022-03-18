@@ -14,21 +14,30 @@
 <!-- button: -->
 <p class="d-inline">
     <% if(!user.admin) { %>
-        <% let isDone = '' ; let resultId = ''%>
-        <% for (const result of user.result) {%>
-            <% if(result.tryout.equals(tryouts._id)) {%>
-                <% isDone = result.tryout ; resultId = result._id %> 
-            <% } %>  
-        <% } %> 
-        <% if (!isDone || !isDone.equals(tryouts._id)) { %>
-            <a class="btn btn-primary mb-3" data-bs-toggle="collapse" href="#problem-set" role="button" id="start" aria-expanded="false" aria-controls="collapseExample" onclick="startTryout(this)" >
-                Mulai
+        <% if(!user.tryout.includes(tryouts._id)){ %> 
+            <a class="btn btn-warning mb-3" href="/tryout/<%= tryouts._id %>/payment">
+                Beli Tryout
             </a>
         <% } else { %>
-            <a class="btn btn-primary mb-3" href="/user/<%= user._id %>/tryout/<%= tryouts._id %>/result/<%=resultId%>">
-                Lihat Hasil
-            </a>
+
+            <% let isDone = '' ; let resultId = ''%>
+            <% for (const result of user.result) {%>
+                <% if(result.tryout.equals(tryouts._id)) {%>
+                    <% isDone = result.tryout ; resultId = result._id %> 
+                <% } %>  
+            <% } %> 
+            <% if (!isDone || !isDone.equals(tryouts._id)) { %>
+                <a class="btn btn-primary mb-3" data-bs-toggle="collapse" href="#problem-set" role="button" id="start" aria-expanded="false" aria-controls="collapseExample" onclick="startTryout(this)" >
+                    Mulai
+                </a>
+            <% } else { %>
+                <a class="btn btn-primary mb-3" href="/user/<%= user._id %>/tryout/<%= tryouts._id %>/result/<%=resultId%>">
+                    Lihat Hasil
+                </a>
+            <% } %> 
+
         <% } %> 
+
     <% } %>
     <% if(user.admin) { %> 
         <div class="row mb-3 justify-content-start">
@@ -53,11 +62,7 @@
             </div>
         </div>
     <% } %>
-    <% if(!user.tryout.includes(tryouts._id)){ %> 
-    <a class="btn btn-warning mb-3" href="/tryout/<%= tryouts._id %>/payment">
-        Beli Tryout
-    </a>
-    <% } %> 
+ 
 </p>
 <!-- admin: untuk menambah question -->
 <div class="collapse mb-3" id="add-question">

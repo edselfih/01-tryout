@@ -9,13 +9,26 @@ module.exports.generateToken = () => {
     return token;
 }
 
+// module.exports.transporter = nodemailer.createTransport({
+//     service: 'yahoo',
+//     host: 'smtp.mail.yahoo.com',
+//     port: 587, //587 atau 465
+//     logger: true ,
+//     secure: true,
+//     debug: false,
+//     auth: {
+//         user: process.env.GMAIL_USER,
+//         pass: process.env.GMAIL_PASS
+//     }
+// })
+
 module.exports.transporter = nodemailer.createTransport({
     service: 'gmail',
     host: 'smtp.gmail.com',
-    port: 587,
+    port: 465, //587 atau 465
+    secure: true,
     auth: {
         user: process.env.GMAIL_USER,
         pass: process.env.GMAIL_PASS
     }
 })
-

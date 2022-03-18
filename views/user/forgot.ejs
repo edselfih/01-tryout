@@ -1,4 +1,13 @@
 <% layout('layout/template.ejs') %>
+<div  class="container-fluid d-flex justify-content-center" >
+    <div class="alert alert-warning mb-3" role="alert">
+        Instruksi:
+        <p class="mb-0">1. Masukan alamat email anda, lalu klik "Send token"</p>
+        <p class="mb-0">2. Masukan token yang sudah dikirim ke email anda, lalu klik "Submit"</p>
+        <p class="mb-0">3. Jika email sudah terekam, dan anda butuh menggantinya, klik "change email"</p>
+        <p class="mb-0">4. Klik "send token again" untuk mengirim ulang token</p>
+    </div>
+</div>
     <div class="container-fluid d-flex justify-content-center">
         <div class="mb-3">
             <div class="card shadow" style="width: 25rem;">
@@ -6,7 +15,7 @@
                 <div class="card-body">
                     <h3 class="card-title">Forgot Password</h3>
                     <form  action="/user/forgot/t" method="POST" class="needs-validation" novalidate>
-                        <div class="collapse <% if(!hideEmailInForgotPage) { console.log(hideEmailInForgotPage)%>show<% } %>  " id="collapseForm">
+                        <div class="collapse <% if(!hideEmailInForgotPage) { %>show<% } %>  " id="collapseForm">
                         <div class="mb-3" >
                             <label class="form-label" for="email">Email</label>
                             <input class="form-control" type="email" name="email" id="email" value="<%=hideEmailInForgotPage%>" placeholder="insert email" required>

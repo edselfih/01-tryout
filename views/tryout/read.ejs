@@ -69,8 +69,20 @@
     <div class="card card-body">
         <div class="form-check mb-3 ps-1 pe-1">
             <form action="/tryout/<%=tryouts._id%>/question" method="POST">
+                <label for="section" class="form-label">Section</label>
+                <textarea class="form-control mb-3" id="section" name="section[section]" rows="4"></textarea>
+                <label for="sectionCode" class="form-label">Code</label>
+                <input class="form-control mb-3" type="text" id="sectionCode" name="section[code]">
+                <button class="btn btn-success">Submit</button>
+            </form>
+            <hr>
+            <form action="/tryout/<%=tryouts._id%>/question" method="POST">
+                <label for="questionCode" class="form-label">Section Code</label>
+                <input class="form-control mb-3" type="text" id="questionCode" name="question[code]">
                 <label for="question" class="form-label">Question</label>
                 <textarea class="form-control mb-3" id="question" name="question[question]" rows="3"></textarea>
+                <label for="questionUrl" class="form-label">QuestionUrl</label>
+                <input class="form-control mb-3" type="text" id="questionUrl" name="question[questionUrl]">
                 <div class="d-flex align-self-start bd-highlight">
                     <div class="d-flex flex-column bd-highlight mb-3">
                         <% const key = ['a','b','c','d','e'] %> 
@@ -81,8 +93,13 @@
                     </div>
                     <div class="d-flex flex-column bd-highlight flex-grow-1 mb-3 ms-2">
                         <% for( let i = 0 ; i < 5 ; i++) { %>
-                        <input class="form-control mb-3" type="text" name="question[choice]" id="btn-check-outlined-<%= i%>" value="">
+                        <input class="form-control mb-3" placeholder="jawaban dalam bentuk text" type="text" name="question[choice]" id="btn-check-outlined-<%= i%>" value="">
                         <% } %> 
+                    </div>
+                    <div class="d-flex flex-column bd-highlight mb-3">
+                        <% for( let i = 0 ; i < 5 ; i++) { %>
+                            <input class="form-control mb-3" placeholder="url gambar" type="text" name="question[choiceUrl]" id="btn-check-outlined-<%= i%>" value="">
+                            <% } %> 
                     </div>
                 </div>
                 <button class="btn btn-success">Submit</button>
@@ -108,55 +125,107 @@
 <!-- admin: untuk read, edit, delete question -->
 <div class="collapse mt-3" id="problem-set-admin">
     <div class="card card-body mb-3">
-        <% for ( question of tryouts.question) { %>
-            <p><%= question.question %> </p>
-            <div class="form-check mb-3">
-                <% for( let i = 0 ; i < 5 ; i++) { %>
-                    <div>
-                        <input class="form-check-input" type="radio" name="answer" id="radio-result-<%=i%>" value="option[<%= i %>]">
-                        <label class="form-check-label" for="radio-result-<%=i%>">
-                          <%= question.choice[i] %> 
-                        </label>
-                    </div>
-                <% } %> 
-            </div>
-            <p><b>Key: <%= question.key.toUpperCase() %></b></p> 
+        <% for (section of tryouts.section) { %>
+            <p><%= section.section %> </p>
             <div class="row mb-3 justify-content-start">
                 <div class="row row-cols-auto row-cols-sm-auto row-cols-md-auto">
                     <div class="col-md-auto mb-2 pe-0">
-                        <a href="/tryout/<%= tryouts._id %>/question/<%= question._id %>/update" class="btn btn-success" role="button">Edit</a>
+                        <a href="/tryout/<%= tryouts._id %>/section/<%= section._id %>/update" class="btn btn-success" role="button">Edit</a>
                     </div>
                     <div class="col-md-auto mb-2 pe-0">
-                        <form action="/tryout/<%= tryouts._id %>/question/<%= question._id %>?_method=DELETE" method="POST" class="d-inline">
+                        <form action="/tryout/<%= tryouts._id %>/section/<%= section._id %>?_method=DELETE" method="POST" class="d-inline">
                             <button class="btn btn-danger">Delete</button>
                         </form>
                     </div>
                 </div>
             </div>
-            <hr class="mt-0">
-        <% } %>  
+            
+            <% for ( question of section.question) { %>
+                <% if (question.question) {%>
+                    <p><%= question.question %> </p>
+                <% } else { %>
+                    <div class="row">
+                        <div class="col">
+                            <img class="rounded float-start" src="<%=question.questionUrl%>" alt="">
+                        </div>
+                    </div>
+                <% } %>  
+                <div class="form-check mb-3">
+                    <% for( let i = 0 ; i < 5 ; i++) { %>
+                        <div>
+                            <% if (question.choice[0]) { %>
+                                <input class="form-check-input" type="radio" name="answer" id="radio-result-<%=i%>" value="option[<%= i %>]">
+                                <label class="form-check-label" for="radio-result-<%=i%>">
+                                  <%= question.choice[i] %> 
+                                </label>
+                            <% } else { %>
+                                <input class="form-check-input" type="radio" name="answer" id="radio-result-<%=i%>" value="option[<%= i %>]">
+                                <label class="form-check-label" for="radio-result-<%=i%>">
+                                    <img class="rounded float-start" src="<%=question.choiceUrl[i]%>" alt="">
+                                </label>
+                            <% } %> 
+                        </div>
+                    <% } %> 
+                </div>
+                <p><b>Key: <%= question.key.toUpperCase() %></b></p> 
+                <div class="row mb-3 justify-content-start">
+                    <div class="row row-cols-auto row-cols-sm-auto row-cols-md-auto">
+                        <div class="col-md-auto mb-2 pe-0">
+                            <a href="/tryout/<%= tryouts._id %>/question/<%= question._id %>/update" class="btn btn-success" role="button">Edit</a>
+                        </div>
+                        <div class="col-md-auto mb-2 pe-0">
+                            <form action="/tryout/<%= tryouts._id %>/question/<%= question._id %>?_method=DELETE" method="POST" class="d-inline">
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <hr class="mt-0">
+            <% } %> 
+            
+        <% } %> 
+ 
     </div>
 </div>
 <!-- user: untuk mengisi ujian -->
 <div class="collapse mt-3" id="problem-set">
     <div class="card card-body mb-3">
         <form action="/user/<%=user._id%>/tryout/<%= tryouts._id %>/result" method="POST" id="tryout">
-            <% for ( question of tryouts.question) { %>
-                <p><%= question.question %> </p>
-                <div class="form-check mb-3">
-                    <% const key = ['a','b','c','d','e'] %> 
-                    <% for( let i = 0 ; i < 5 ; i++) { %>
-                        <!-- perhatikan id dan for dalam membuat radio iput, karena jika label ter tekan akan mencari id yang sama dengan fornya, kalau semuanya sama, maka akan dipilih yang pling atas -->
-                        <div>
-                            <input class="form-check-input" type="radio" name="answer[<%= question._id %>]" id="answer-<%= question._id %>-<%i%>" value="<%= key[i] %>">
-                            <label class="form-check-label" for="answer-<%= question._id %>-<%i%>">
-                              <%= question.choice[i] %> 
-                            </label>
+            <% for (section of tryouts.section) {%>
+                <p><%= section.section %> </p>
+
+                <% for ( question of section.question) { %>
+                    <% if (question.question) {%>
+                        <p><%= question.question %> </p>
+                    <% } else { %>
+                        <div class="row">
+                            <div class="col">
+                                <img class="rounded float-start" src="<%=question.questionUrl%>" alt="">
+                            </div>
                         </div>
-                    <% } %> 
-                </div>
-                <hr class="mt-0">
-            <% } %>  
+                    <% } %>  
+                    <div class="form-check mb-3">
+                        <% const key = ['a','b','c','d','e'] %> 
+                        <% for( let i = 0 ; i < 5 ; i++) { %>
+                            <!-- perhatikan id dan for dalam membuat radio iput, karena jika label ter tekan akan mencari id yang sama dengan fornya, kalau semuanya sama, maka akan dipilih yang pling atas -->
+                            <div>
+                                <% if (question.choice[0]) { %>
+                                    <input class="form-check-input" type="radio" name="answer[<%= question._id %>]" id="answer-<%= question._id %>-<%i%>" value="<%= key[i] %>">
+                                    <label class="form-check-label" for="answer-<%= question._id %>-<%i%>">
+                                      <%= question.choice[i] %> 
+                                    </label>
+                                <% } else { %> 
+                                    <input class="form-check-input" type="radio" name="answer[<%= question._id %>]" id="answer-<%=question._id%>" value="<%= key[i] %>">
+                                    <label class="form-check-label" for="answer-<%=question._id%>">
+                                        <img class="rounded float-start" src="<%=question.choiceUrl[i]%>" alt="">
+                                    </label>
+                                <% } %> 
+                            </div>
+                        <% } %> 
+                    </div>
+                    <hr class="mt-0">
+                <% } %> 
+            <% } %>
             <button class="btn btn-success" onclick="submited()">Selesai</button>
         </form>
     </div>
@@ -172,7 +241,7 @@
         //     var countDownDate = new Date(timerUp).getTime();
     
         // jika waktu dimulai dari spesiifik time tidak bergantung mulai
-            var countDownDate = new Date("Mar 16, 2022 16:55:30 GMT+07:00").getTime() 
+            var countDownDate = new Date("Mar 20, 2023 16:55:30 GMT+07:00").getTime() 
         // Update the count down every 1 second
         var x = setInterval(function() {
     

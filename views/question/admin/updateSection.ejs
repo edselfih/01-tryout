@@ -1,0 +1,13 @@
+<% layout('layout/template.ejs') %>
+<h1 class="text-center mb-3">Updating Section</h1>
+    <div class="card card-body">
+        <div class="form-check mb-3 ps-1 pe-1">
+            <form action="/tryout/<%=tryouts._id %>/section/<%=sections._id%>?_method=PUT" method="POST" class="needs-validation" novalidate>
+                <label for="section" class="form-label">Section</label>
+                <textarea class="form-control mb-3" id="section" name="section[section]" rows="3"><%= sections.section %></textarea>
+                <label for="sectionCode" class="form-label">Code</label>
+                <input class="form-control mb-3" type="text" id="sectionCode" name="section[code]" value="<%=sections.code%>">
+                <button class="btn btn-success">Update</button>
+            </form>
+        </div>
+    </div>

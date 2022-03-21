@@ -13,9 +13,9 @@ const tryoutSchema = new Schema ({
     image:  String,
     price: Number,
     // harus dikasih array biar bisa dipush
-    question : [{
+    section : [{
         type: Schema.Types.ObjectId,
-        ref: 'Question'
+        ref: 'Section'
     }],
     author : {
         type: Schema.Types.ObjectId,

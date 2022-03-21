@@ -2,16 +2,17 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const questionSchema = new Schema ({
-    question: {
-        type: String,
-        required : true
-    },
+    question: String,
     key: {
         type: String,
         required : true
     },
-    choice: {
-        type: [String],
+    choice: [String],
+    questionUrl: String,
+    choiceUrl: [String],
+    code: {
+        type: String,
+        unique: true,
         required: true
     }
 })

@@ -125,7 +125,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/tryout', tryoutRoutes);
-app.use('/tryout/:tryoutId/question', questionRoutes); 
+app.use('/tryout/:tryoutId', questionRoutes); 
 app.use('/', userRoutes);
 app.get('/', (req, res) => {
     res.render('index')

@@ -11,7 +11,12 @@ module.exports.index = async (req, res) => {
 module.exports.readTryout = async (req, res) => {
     const {tryoutId} = req.params;
     const user = await User.findById(req.user._id).populate('result');
-    const tryouts = await Tryout.findById(tryoutId).populate('question');
+    const tryouts = await Tryout.findById(tryoutId).populate({
+        path: 'section',
+        populate: {
+            path: 'question'
+        }
+    });
     // console.log(tryoutId)
     // console.log(tryouts)
     if( !tryouts ) {
@@ -106,7 +111,7 @@ module.exports.createPayment = async (req, res) => {
         },
         "gopay": {
             "enable_callback": true,
-            "callback_url": `http://192.168.68.112:3000/tryout/6207d639437b3e8dee5a8498/payment/order${serialNum}`
+            "callback_url": `http://192.168.68.112:3000/tryout/${tryoutId}/payment/order${serialNum}`
         }
       }
       

@@ -3,8 +3,12 @@
     <div class="card card-body">
         <div class="form-check mb-3 ps-1 pe-1">
             <form action="/tryout/<%=tryouts._id %>/question/<%=questions._id%>?_method=PUT" method="POST" class="needs-validation" novalidate>
+                <label for="questionCode" class="form-label">Section Code</label>
+                <input class="form-control mb-3" type="text" id="questionCode" name="question[code]" value="<%=questions.code%>">
                 <label for="question" class="form-label">Question</label>
                 <textarea class="form-control mb-3" id="question" name="question[question]" rows="3"><%= questions.question %></textarea>
+                <label for="question" class="form-label">QuestionUrl</label>
+                <input class="form-control mb-3" type="text" id="questionUrl" name="question[questionUrl]" value="<%=questions.questionUrl%>">
                 <div class="d-flex align-self-start bd-highlight">
                     <div class="d-flex flex-column bd-highlight mb-3">
                         <% const key = ['a','b','c','d','e'] %> 
@@ -17,6 +21,11 @@
                         <% for( let i = 0 ; i < 5 ; i++) { %>
                         <input class="form-control mb-3" type="text" name="choice" id="btn-check-outlined-<%= i%>" value="<%= questions.choice[i] %>">
                         <% } %> 
+                    </div>
+                    <div class="d-flex flex-column bd-highlight mb-3">
+                        <% for( let i = 0 ; i < 5 ; i++) { %>
+                            <input class="form-control mb-3" placeholder="url gambar" type="text" name="question[choiceUrl]" id="btn-check-outlined-<%= i%>" value="<%=questions.choiceUrl%>">
+                            <% } %> 
                     </div>
                 </div>
                 <button class="btn btn-success">Update</button>

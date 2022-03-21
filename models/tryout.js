@@ -20,6 +20,10 @@ const tryoutSchema = new Schema ({
     author : {
         type: Schema.Types.ObjectId,
         ref: 'User'
+    },
+    display: {
+        type: Boolean,
+        default: false
     }
 })
 

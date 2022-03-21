@@ -22,6 +22,7 @@ const mongoStore = require('connect-mongo');
 const tryoutRoutes = require('./routes/tryout');
 const userRoutes = require('./routes/user');
 const questionRoutes = require('./routes/question');
+const homeRoutes = require('./routes/home');
 
 const User = require('./models/user');
 const AppError = require('./utilities/AppError.js');
@@ -127,9 +128,7 @@ app.use((req, res, next) => {
 app.use('/tryout', tryoutRoutes);
 app.use('/tryout/:tryoutId', questionRoutes); 
 app.use('/', userRoutes);
-app.get('/', (req, res) => {
-    res.render('index')
-});
+app.use('/', homeRoutes);
 
 // Error Handler untuk alamat yang tidak ditemukan, ini berlaku untuk semua path dan semua app.METHOD()
 app.all('*', (req, res, next) => {

@@ -53,9 +53,9 @@ module.exports.updateTryout = async (req, res) => {
 module.exports.deleteTryout = async (req, res) => {
     const {tryoutId} = req.params
     const tryout = await Tryout.findById(tryoutId)
-    if(tryout.question) {
-        for (const question of tryout.question) {
-            await Question.findByIdAndDelete(question._id)
+    if(tryout.section) {
+        for (const section of tryout.section) {
+            await Section.findByIdAndDelete(question._id)
         }
     }
     await Tryout.findByIdAndDelete(tryoutId)

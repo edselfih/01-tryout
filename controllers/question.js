@@ -72,22 +72,80 @@ module.exports.createQuestion = async (req, res) => {
     // untuk upload via excel
     if (req.file) {
         const workbook = XLSX.readFile(`./upload/${req.file.filename}`);
-        const sheet_name_list = workbook.SheetNames;      
+        const sheet_name_list = workbook.SheetNames;
+        let step = 1
         sheet_name_list.forEach(async function (y) {
             const worksheet = workbook.Sheets[y];
-            const questions = XLSX.utils.sheet_to_json(worksheet); 
-                for (const question of questions ) { 
-                    const choice = []
-                    const key = ['A','B','C','D','E']
-                    for (let i = 0; i < 5 ; i++) {
-                        choice.push(question[`choice_${key[i]}`])
-                    }
-                    const newQuestion = new Question({question: question.question, key: question.key.toLowerCase().trim(), choice})
+            const questions = XLSX.utils.sheet_to_json(worksheet);
+            for (const question of questions){
+                console.log(`ini harusnya ada 5`)
+                //step 1
+                if(question.section ) {
+                    const newSection = new Section({section: question.section, code: question.code})
                     const tryout = await Tryout.findById(tryoutId)
-                    tryout.question.push(newQuestion)
-                    await newQuestion.save()
+                    tryout.section.push(newSection)
+                    await newSection.save()
                     await tryout.save()
+                    console.log(`selesai upload section`)
+                    step = 2
                 }
+                //step 2
+                async function uploadQuestion() {
+                    if ((question.question || question.questionUrl) && step === 2) {
+                        const choice = [];
+                        const choiceUrl = [];
+                        const key = ['A','B','C','D','E']
+                        for (let i = 0; i < 5 ; i++) {
+                            if(question.choice_A) {
+                                choice.push(question[`choice_${key[i]}`])
+                            } else {
+                                choiceUrl.push(question[`choiceUrl_${key[i]}`])
+                            }
+                        }
+                        console.log(question.choice_A)
+                        if (question.question) {
+                            if(question.choice_A) {
+                                const newQuestion = new Question({question: question.question, key: question.key.toLowerCase().trim(), choice, code : question.code})
+                                const section = await Section.findOne({code: question.code})
+                                section.question.push(newQuestion)
+                                await newQuestion.save()
+                                await section.save()
+                                console.log(`qtext ctext`)
+
+                            } else {
+                                const newQuestion = new Question({question: question.question, key: question.key.toLowerCase().trim(), choiceUrl, code : question.code})
+                                const section = await Section.findOne({code: question.code})
+                                section.question.push(newQuestion)
+                                await newQuestion.save()
+                                await section.save()
+                                console.log(`qtext cg`)
+
+                            }
+                        }
+                        if(!question.question) {
+                            if(question.choice_A) {
+                                const newQuestion = new Question({questionUrl: question.questionUrl, key: question.key.toLowerCase().trim(), choice, code : question.code})
+                                const section = await Section.findOne({code: question.code})
+                                section.question.push(newQuestion)
+                                await newQuestion.save()
+                                await section.save()
+                                console.log(`qg ctext`)
+
+                            } else {
+                                const newQuestion = new Question({questionUrl: question.questionUrl, key: question.key.toLowerCase().trim(), choiceUrl, code : question.code})
+                                const section = await Section.findOne({code: question.code})
+                                section.question.push(newQuestion)
+                                await newQuestion.save()
+                                await section.save()
+                                console.log(`qg cg`)
+
+                            }
+                        }
+                        console.log(`upload question berhasil`)
+                    }
+                }
+                setTimeout(uploadQuestion, 1000)
+            }
             const directory = 'upload';
             fs.readdir(directory, (err, files) => { 
                 if (err) throw err; 
@@ -97,10 +155,9 @@ module.exports.createQuestion = async (req, res) => {
                     });
                 }
             });
-            res.redirect(`/tryout/${tryoutId}`)
         });
     }
-
+    res.redirect(`/tryout/${tryoutId}`)
 };
 
 module.exports.updateQuestionPage = async (req, res) => {

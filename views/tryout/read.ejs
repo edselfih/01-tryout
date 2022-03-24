@@ -79,6 +79,10 @@
             <form action="/tryout/<%=tryouts._id%>/question" method="POST">
                 <label for="questionCode" class="form-label">Section Code</label>
                 <input class="form-control mb-3" type="text" id="questionCode" name="question[code]">
+                <div class="col-1">
+                    <label for="questionNum" class="form-label">Number</label>
+                    <input class="form-control mb-3" type="number" id="questionNum" name="question[number]">
+                </div>
                 <label for="question" class="form-label">Question</label>
                 <textarea class="form-control mb-3" id="question" name="question[question]" rows="3"></textarea>
                 <label for="questionUrl" class="form-label">QuestionUrl</label>
@@ -139,10 +143,9 @@
                     </div>
                 </div>
             </div>
-            
             <% for ( question of section.question) { %>
                 <% if (question.question) {%>
-                    <p><%= question.question %> </p>
+                    <p><%= question.number %>. <%= question.question %> </p>
                 <% } else { %>
                     <div class="row">
                         <div class="col">
@@ -196,7 +199,7 @@
 
                 <% for ( question of section.question) { %>
                     <% if (question.question) {%>
-                        <p><%= question.question %> </p>
+                        <p><%= question.number %>. <%= question.question %> </p>
                     <% } else { %>
                         <div class="row">
                             <div class="col">

@@ -14,7 +14,8 @@ module.exports.readTryout = async (req, res) => {
     const tryouts = await Tryout.findById(tryoutId).populate({
         path: 'section',
         populate: {
-            path: 'question'
+            path: 'question',
+            options: { sort: { 'number': 1 } }
         }
     });
     // console.log(tryoutId)

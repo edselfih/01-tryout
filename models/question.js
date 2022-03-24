@@ -14,6 +14,10 @@ const questionSchema = new Schema ({
         type: String,
         unique: true,
         required: true
+    },
+    number: {
+        type: Number,
+        required: true
     }
 })
 

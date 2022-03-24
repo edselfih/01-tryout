@@ -5,6 +5,10 @@
             <form action="/tryout/<%=tryouts._id %>/question/<%=questions._id%>?_method=PUT" method="POST" class="needs-validation" novalidate>
                 <label for="questionCode" class="form-label">Section Code</label>
                 <input class="form-control mb-3" type="text" id="questionCode" name="question[code]" value="<%=questions.code%>">
+                <div class="col-1">
+                    <label for="questionNum" class="form-label">Number</label>
+                    <input class="form-control mb-3" type="number" id="questionNum" name="question[number]" value="<%=questions.number%>">
+                </div>
                 <label for="question" class="form-label">Question</label>
                 <textarea class="form-control mb-3" id="question" name="question[question]" rows="3"><%= questions.question %></textarea>
                 <label for="question" class="form-label">QuestionUrl</label>
@@ -19,12 +23,12 @@
                     </div>
                     <div class="d-flex flex-column bd-highlight flex-grow-1 mb-3 ms-2">
                         <% for( let i = 0 ; i < 5 ; i++) { %>
-                        <input class="form-control mb-3" type="text" name="choice" id="btn-check-outlined-<%= i%>" value="<%= questions.choice[i] %>">
+                        <input class="form-control mb-3" type="text" name="question[choice]" id="btn-check-outlined-<%= i%>" autocomplete="off" value="<%= questions.choice[i] %>">
                         <% } %> 
                     </div>
                     <div class="d-flex flex-column bd-highlight mb-3">
                         <% for( let i = 0 ; i < 5 ; i++) { %>
-                            <input class="form-control mb-3" placeholder="url gambar" type="text" name="question[choiceUrl]" id="btn-check-outlined-<%= i%>" value="<%=questions.choiceUrl%>">
+                            <input class="form-control mb-3" placeholder="url gambar" type="text" name="question[choiceUrl]" id="btn-check-outlined-<%= i%>" autocomplete="off" value="<%=questions.choiceUrl[i]%>">
                             <% } %> 
                     </div>
                 </div>

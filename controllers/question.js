@@ -21,7 +21,7 @@ module.exports.createQuestion = async (req, res) => {
 
     // upload manual:
     if (req.body.question) {
-        const {question, choice, key, questionUrl, choiceUrl, code } = req.body.question
+        const {question, choice, key, questionUrl, choiceUrl, code, number } = req.body.question
         // const inputQuestion = async (key, q, c, gu, cu) => {
         //     const newQuestion = new Question({ key : key, question: q, choice: c, questionUrl: gu, choiceUrl: cu })
         //     console.log(newQuestion)
@@ -33,7 +33,7 @@ module.exports.createQuestion = async (req, res) => {
         // }
         if(question) {
             if (choice[0].length > 2) {
-                const newQuestion = new Question({key, code, question, key, choice })
+                const newQuestion = new Question({key, code, question, key, choice, number })
                 const section = await Section.findOne({code})
                 section.question.push(newQuestion)
                 await section.save()
@@ -41,7 +41,7 @@ module.exports.createQuestion = async (req, res) => {
                 res.redirect(`/tryout/${tryoutId}`)
                 // inputQuestion(key, question, choice, questionUrl, choiceUrl)
             } else {
-                const newQuestion = new Question({key, code, question, choiceUrl })
+                const newQuestion = new Question({key, code, question, choiceUrl, number })
                 const section = await Section.findOne({code})
                 section.question.push(newQuestion)
                 await section.save()
@@ -51,7 +51,7 @@ module.exports.createQuestion = async (req, res) => {
             }
         } else {
             if (choice[0].length > 2) {
-                const newQuestion = new Question({key, code, questionUrl, choice })
+                const newQuestion = new Question({key, code, questionUrl, choice , number})
                 const section = await Section.findOne({code})
                 section.question.push(newQuestion)
                 await section.save()
@@ -59,7 +59,7 @@ module.exports.createQuestion = async (req, res) => {
                 res.redirect(`/tryout/${tryoutId}`)
                 // inputQuestion(key, question, choice, questionUrl, choiceUrl)
             } else {
-                const newQuestion = new Question({key, code, questionUrl, choiceUrl })
+                const newQuestion = new Question({key, code, questionUrl, choiceUrl, number })
                 const section = await Section.findOne({code})
                 section.question.push(newQuestion)
                 await section.save()
@@ -105,7 +105,7 @@ module.exports.createQuestion = async (req, res) => {
                         console.log(question.choice_A)
                         if (question.question) {
                             if(question.choice_A) {
-                                const newQuestion = new Question({question: question.question, key: question.key.toLowerCase().trim(), choice, code : question.code})
+                                const newQuestion = new Question({question: question.question, key: question.key.toLowerCase().trim(), choice, code : question.code, number: question.number})
                                 const section = await Section.findOne({code: question.code})
                                 section.question.push(newQuestion)
                                 await newQuestion.save()
@@ -113,7 +113,7 @@ module.exports.createQuestion = async (req, res) => {
                                 console.log(`qtext ctext`)
 
                             } else {
-                                const newQuestion = new Question({question: question.question, key: question.key.toLowerCase().trim(), choiceUrl, code : question.code})
+                                const newQuestion = new Question({question: question.question, key: question.key.toLowerCase().trim(), choiceUrl, code : question.code, number: question.number})
                                 const section = await Section.findOne({code: question.code})
                                 section.question.push(newQuestion)
                                 await newQuestion.save()
@@ -124,7 +124,7 @@ module.exports.createQuestion = async (req, res) => {
                         }
                         if(!question.question) {
                             if(question.choice_A) {
-                                const newQuestion = new Question({questionUrl: question.questionUrl, key: question.key.toLowerCase().trim(), choice, code : question.code})
+                                const newQuestion = new Question({questionUrl: question.questionUrl, key: question.key.toLowerCase().trim(), choice, code : question.code, number: question.number})
                                 const section = await Section.findOne({code: question.code})
                                 section.question.push(newQuestion)
                                 await newQuestion.save()
@@ -132,7 +132,7 @@ module.exports.createQuestion = async (req, res) => {
                                 console.log(`qg ctext`)
 
                             } else {
-                                const newQuestion = new Question({questionUrl: question.questionUrl, key: question.key.toLowerCase().trim(), choiceUrl, code : question.code})
+                                const newQuestion = new Question({questionUrl: question.questionUrl, key: question.key.toLowerCase().trim(), choiceUrl, code : question.code, number: question.number})
                                 const section = await Section.findOne({code: question.code})
                                 section.question.push(newQuestion)
                                 await newQuestion.save()
@@ -169,9 +169,9 @@ module.exports.updateQuestionPage = async (req, res) => {
 
 // yg url belum
 module.exports.updateQuestion = async (req, res) => {
-    const {question, choice, key, code} = req.body.question
+    const {question, choice, code, key, questionUrl, choiceUrl, number} = req.body.question
     const {tryoutId,questionId} = req.params;
-    const updatedQuestion = await Question.findByIdAndUpdate( questionId ,{question, choice, key, code}, {runValidators: true, new: true});
+    const updatedQuestion = await Question.findByIdAndUpdate( questionId ,{question, choice, key, code, number, questionUrl, choiceUrl}, {runValidators: true, new: true});
     await Section.findOneAndUpdate({question: { $in: questionId}}, {$pull: {question: questionId}});
     const selectedSection = await Section.findOne({code})
     selectedSection.question.push(updatedQuestion)

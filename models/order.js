@@ -2,10 +2,14 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const orderSchema = new Schema ({
-    order: [{
+    orderNum : {
         type: Number,
-        required : true
-    }],
+        required: true
+    },
+    tryout: {
+        type: Schema.Types.ObjectId,
+        ref: 'Tryout'
+    }
 })
 
 module.exports = mongoose.model('Order', orderSchema)

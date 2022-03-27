@@ -17,14 +17,18 @@ router.route('/:tryoutId')
     .put( isLogin, tryoutController.updateTryout )
     .delete( isLogin, tryoutController.deleteTryout )
 
-router.route('/:tryoutId/payment')
-    .get( catchAsync(tryoutController.createPaymentPage))
-    .post( catchAsync(tryoutController.createPayment))
-
-router.route('/:tryoutId/payment/:orderId')
-    .get( catchAsync(tryoutController.confirmPayment))
-
 router.route('/:tryoutId/update')
     .get( isLogin, tryoutController.updateTryoutPage );
+
+// payment:
+
+router.route('/:tryoutId/payment')
+    .post( catchAsync(tryoutController.createToken))
+
+router.route('/:tryoutId/payment/:tokenId')
+    .get( catchAsync(tryoutController.createPayment))
+
+router.route('/payment/finish')
+    .get( catchAsync(tryoutController.finishPay))
 
 module.exports = router;

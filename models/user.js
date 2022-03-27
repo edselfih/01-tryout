@@ -24,6 +24,10 @@ const userSchema = new Schema ({
     tryout: [{
         type: Schema.Types.ObjectId,
         ref: 'Tryout'
+    }],
+    order: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Order'
     }]
 })
 

@@ -15,9 +15,9 @@
 <p class="d-inline">
     <% if(!user.admin) { %>
         <% if(!user.tryout.includes(tryouts._id)){ %> 
-            <a class="btn btn-warning mb-3" href="/tryout/<%= tryouts._id %>/payment">
-                Beli Tryout
-            </a>
+            <form action="/tryout/<%= tryouts._id %>/payment" method="POST" >
+                <button class="btn btn-warning mb-3" >Beli Tryout</button>
+            </form>
         <% } else { %>
 
             <% let isDone = '' ; let resultId = ''%>

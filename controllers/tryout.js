@@ -2,6 +2,16 @@ const User = require('../models/user.js');
 const Question = require('../models/question.js');
 const Tryout = require('../models/tryout.js');
 const Order = require('../models/order.js');
+const midtransClient = require('midtrans-client');
+const { urlencoded } = require('express');
+const tryout = require('../models/tryout.js');
+
+    // Create Snap API instance
+let snap = new midtransClient.Snap({
+        isProduction : false,
+        serverKey : 'SB-Mid-server-MJdZAnWPudpNbjt3vZQ3KXxQ',
+        clientKey : 'SB-Mid-client-SK-7lvlHEvE3a3bK'
+    });
 
 module.exports.index = async (req, res) => {
     const tryouts = await Tryout.find({});
@@ -10,7 +20,11 @@ module.exports.index = async (req, res) => {
 
 module.exports.readTryout = async (req, res) => {
     const {tryoutId} = req.params;
-    const user = await User.findById(req.user._id).populate('result');
+    const user = await User.findById(req.user._id).populate('result').populate({
+        path: 'order', 
+        options: { sort : { '_id' : 1 }}
+    });
+    console.log(user)
     const tryouts = await Tryout.findById(tryoutId).populate({
         path: 'section',
         populate: {
@@ -18,11 +32,36 @@ module.exports.readTryout = async (req, res) => {
             options: { sort: { 'number': 1 } }
         }
     });
-    // console.log(tryoutId)
-    // console.log(tryouts)
+    let pendingOrder = ''
+    if (user.order) {
+        for (const order of user.order) {
+            console.log(tryoutId)
+            if(order.tryout.equals(tryoutId)) {
+                pendingOrder = `order-${order.orderNum}`
+                console.log(`ini pending order dr dalam: ${pendingOrder}`)
+            }
+        }
+    }
+    console.log(`ini pending order ${pendingOrder}`)
     if( !tryouts ) {
         req.flash('error', 'tryout tidak ditemukan')  
         return res.redirect('/tryout')
+    }
+    if (pendingOrder !== '') {
+        snap.transaction.status(pendingOrder)
+        .then((response)=>{
+            console.log(response)
+            // udah ada if pasti ditungguin user savenya
+            if(response.transaction_status === 'settlement') {
+                user.tryout.push(tryouts)
+                user.save()
+            }
+            res.redirect(`/tryout/${tryouts._id}`)
+        })
+        .catch((e) => {
+            e
+        })
+        
     }
     res.render('./tryout/read', {tryouts, user});
 };
@@ -65,84 +104,71 @@ module.exports.deleteTryout = async (req, res) => {
 
 // payment:
 
-const midtransClient = require('midtrans-client');
-const tryout = require('../models/tryout.js');
-const user = require('../models/user.js');
-// Create Core API instance
-let core = new midtransClient.CoreApi({
-        isProduction : false,
-        serverKey : 'SB-Mid-server-MJdZAnWPudpNbjt3vZQ3KXxQ',
-        clientKey : 'SB-Mid-client-SK-7lvlHEvE3a3bK'
-    });
-
-module.exports.createPaymentPage = async (req, res) => {
-    const {tryoutId} = req.params
-    const tryouts = await Tryout.findById(tryoutId)
-    res.render('./payment/index', {tryouts})
-};
-
-module.exports.createPayment = async (req, res) => {
-    const order = await Order.findOne()
-    const lastOrder = order.order
-    const length = lastOrder.length
-    let serialNum = lastOrder[length - 1] + 1
-    order.order.push(serialNum)
-    order.save()
-    // const order = new Order({order : 1});
-    // await order.save();
-    const {tryoutId} = req.params
+module.exports.createToken = async (req, res) => {
     const user = req.user
+    const {tryoutId} = req.params
     const tryouts = await Tryout.findById(tryoutId)
+    const order = await Order.findOne().sort({orderNum : -1})
+    let serialNum = 0
+    if(!order) {
+        serialNum = 1
+        const newOrder = new Order({orderNum: 1, tryout: tryoutId})
+        await newOrder.save()
+    } else {
+        serialNum = order.orderNum + 1
+        console.log(serialNum)
+        const newOrder = new Order({orderNum : serialNum, tryout: tryouts._id})
+        await newOrder.save()
+        user.order.push(newOrder)
+        await user.save()
+    }
     const parameter = {
-        "payment_type": "gopay",
         "transaction_details": {
-            "order_id": `order${serialNum}`,
-            "gross_amount": tryouts.price
+          "order_id": `order-${serialNum}`,
+          "gross_amount": tryouts.price
         },
         "item_details": [
           {
-            "id": "id1",
+            "id": `${tryouts._id}`,
             "price": tryouts.price,
             "quantity": 1,
             "name": `${tryouts.title}`
           }
         ],
         "customer_details": {
-            "first_name": `${user.username}`,
-            "last_name" : ``,
-            "email": `${user.email}`,
+          "first_name": `${user.username}`,
+          "last_name": "",
+          "email": `${user.email}`
         },
-        "gopay": {
-            "enable_callback": true,
-            "callback_url": `http://192.168.68.112:3000/tryout/${tryoutId}/payment/order${serialNum}`
+        "callbacks": {
+            "finish": "https://limitless-spire-56174.herokuapp.com/tryout/payment/finish"
         }
-      }
-      
-    core.charge(parameter)
-    .then((chargeResponse)=>{
-        console.log('chargeResponse:',JSON.stringify(chargeResponse));
-        const charge = JSON.stringify(chargeResponse)
-        console.log(`tes: ${chargeResponse.actions[1].url}`)
-        console.log(parameter)
-        res.redirect(chargeResponse.actions[1].url)
+    }
+
+    snap.createTransaction(parameter)
+    .then((transaction)=>{
+        // transaction token
+        const transactionToken = transaction.token;
+        console.log('transactionToken:',transactionToken);
+        res.redirect(`/tryout/${tryoutId}/payment/${transactionToken}`)
     })
-    .catch((e)=>{
-        console.log('Error occured:',e.message);
-    });;
 };
 
-module.exports.confirmPayment = async (req, res) => {
-    const {orderId, tryoutId} = req.params
-    const user = req.user
+module.exports.createPayment = async (req, res) => {
+    const {tokenId, tryoutId} = req.params
     const tryouts = await Tryout.findById(tryoutId)
-    core.transaction.status(`${orderId}`)
-    .then((response)=>{
-        // udah ada if pasti ditungguin user savenya
-        if(response.transaction_status === 'settlement') {
-            user.tryout.push(tryouts)
-            user.save()
-        }
-        res.redirect(`/tryout/${tryouts._id}`)
-    });
+    res.render(`./payment/index`, {tokenId, tryouts})
+};
 
+module.exports.finishPay = async (req, res) => {
+    const {order_id, transaction_status} = req.query
+    console.log(req.query)
+    const user = req.user
+    const order = await Order.findOne({orderId: order_id})
+    const tryouts = await Tryout.findById(order.tryout)
+    if (transaction_status === 'settlement') {
+        user.tryout.push(tryouts)
+        user.save()
+    }
+    res.redirect(`/tryout/${tryouts._id}`)
 }
